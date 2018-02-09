@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   Collapse,
   Navbar,
@@ -10,33 +10,37 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem } from 'reactstrap';
+  DropdownItem,
+} from 'reactstrap'
+import { connect } from 'react-redux'
+import Icon from 'react-icons-kit'
+import { car } from 'react-icons-kit/fa/car'
 
-import Icon from 'react-icons-kit';
-import { car } from 'react-icons-kit/fa/car';
+import { tryLogin } from '../../actions/app'
 
-export default class AdminNavigatioBar extends React.Component {
+class AdminNavigatioBar extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.toggle = this.toggle.bind(this);
+    this.toggle = this.toggle.bind(this)
     this.state = {
       isOpen: false
-    };
+    }
   }
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
-    });
+    })
   }
+
   render() {
     return (
       <div>
         <Navbar color="primary" dark expand="md">
           <div className="container">
             <NavbarBrand href="/admin/">
-            <Icon className="car-icon" icon={car}/>
-             G66 CARS ADMIN</NavbarBrand>
+              <img className="logo-banner" src={ require('./dealer-logo.png') } alt="logo-image" />
+            </NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
@@ -57,7 +61,9 @@ export default class AdminNavigatioBar extends React.Component {
                     <DropdownItem>
                       PROFILE
                     </DropdownItem>
-                    <DropdownItem>
+                    <DropdownItem
+                      onClick={ e => this.props.tryLogin(false) }
+                    >
                       LOGOUT
                     </DropdownItem>
                   </DropdownMenu>
@@ -67,6 +73,8 @@ export default class AdminNavigatioBar extends React.Component {
           </div>
         </Navbar>
       </div>
-    );
+    )
   }
 }
+
+export default connect(null, { tryLogin })(AdminNavigatioBar)

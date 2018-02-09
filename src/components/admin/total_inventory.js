@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
-import { Row, Col } from 'reactstrap';
+import React, { Component } from 'react'
+import { Row, Col } from 'reactstrap'
 
 class TotalInventory extends Component{
   render(){
 
-    let sedan = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type == "Sedan") : null;
+    let sedan = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type === "Sedan") : null
 
-    let coupe = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type == "Coupe") : null;
+    let coupe = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type === "Coupe") : null
 
-    let suv = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type == "SUV") : null;
+    let suv = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type === "SUV") : null
 
-    let van = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type == "Van") : null;
+    let van = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type === "Van") : null
 
-    let convertible = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type == "Convertible") : null;
+    let convertible = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type === "Convertible") : null
 
-    let hatchback = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type == "Hatchback") : null;
+    let hatchback = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type === "Hatchback") : null
 
-    let truck = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type == "Truck") : null;
+    let truck = this.props.totalInventory ? this.props.totalInventory.filter(inventory => inventory.body_type === "Truck") : null
 
 
 
@@ -60,8 +60,8 @@ class TotalInventory extends Component{
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default TotalInventory;
+export default TotalInventory

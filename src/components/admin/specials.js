@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 class Specials extends Component{
   render(){
-    
     let specialsOnCars = this.props.cars ? this.props.cars.map(car =>{
       return(
         <p key={car.id}>
@@ -13,7 +12,7 @@ class Specials extends Component{
         </Link>
         </p>
       )
-    }) : null;
+    }) : null
 
     return(
       <div>
@@ -24,15 +23,14 @@ class Specials extends Component{
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
 function mapStateToProps(state, props){
   return{
     cars: state.cars.filter(car => car.sale > 0)
-
   }
 }
 
-export default connect(mapStateToProps, null)(Specials);
+export default connect(mapStateToProps, null)(Specials)

@@ -1,10 +1,10 @@
-import { UPDATE_FILTER } from '../actions/filtered';
+import { UPDATE_FILTER } from '../actions/filtered'
 
 export default (state = {}, action) => {
   switch (action.type) {
     case UPDATE_FILTER:
-      return {...action.filterData};
+      return {...action.filterData}
     default:
-      return state;
+      return state
   }
 }

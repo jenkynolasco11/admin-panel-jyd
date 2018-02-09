@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { editCar } from '../../actions/cars';
-import { Form, FormGroup, Label, Row, Col } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import { Field, reduxForm } from 'redux-form';
-import Img from 'react-image';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { editCar } from '../../actions/cars'
+import { Form, FormGroup, Label, Row, Col } from 'reactstrap'
+import { Link } from 'react-router-dom'
+import { Field, reduxForm } from 'redux-form'
+import Img from 'react-image'
 
 class EditCar extends Component{
 
   updateOneCar = (values) => {
-    this.props.editCar(values);
+    this.props.editCar(values)
   }
 
   render(){
 
-    let image = this.props.initialValues ? this.props.initialValues.link : null;
+    let image = this.props.initialValues ? this.props.initialValues.link : null
 
     return(
 
@@ -229,13 +229,13 @@ class EditCar extends Component{
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
 function mapStateToProps(state, props){
   return{
-    initialValues: state.cars.filter(car => car.id == props.match.params.id)[0]
+    initialValues: state.cars.filter(car => car.id === props.match.params.id)[0]
   }
 }
 
@@ -248,4 +248,4 @@ function mapDispatchToProps(dispatch) {
 
 EditCar = reduxForm({ form: 'edit_car' })(EditCar)
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditCar);
+export default connect(mapStateToProps, mapDispatchToProps)(EditCar)

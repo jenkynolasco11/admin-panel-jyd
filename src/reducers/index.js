@@ -1,16 +1,16 @@
-import cars from './cars';
-import filtered from './filter';
-import messages from './message';
-import { reducer as formReducer } from 'redux-form';
-import { combineReducers } from 'redux';
+import cars from './cars'
+import filtered from './filter'
+import messages from './message'
+import app from './app'
+import { reducer as formReducer } from 'redux-form'
+import { combineReducers } from 'redux'
 
   const rootReducer = combineReducers({
-
+    app,
     filtered,
     cars,
     messages,
     form: formReducer
+  })
 
-  });
-
-export default rootReducer;
+export default rootReducer

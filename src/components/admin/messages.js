@@ -1,26 +1,26 @@
-import React, { Component } from 'react';
-import { Row, Col} from 'reactstrap';
-import { connect } from 'react-redux';
-import { deleteMsg } from '../../actions/message';
-import Icon from 'react-icons-kit';
-import { bin } from 'react-icons-kit/icomoon';
-import { enlarge } from 'react-icons-kit/icomoon';
-import MessageWindow from './message_window';
+import React, { Component } from 'react'
+import { Row, Col} from 'reactstrap'
+import { connect } from 'react-redux'
+import { deleteMsg } from '../../actions/message'
+import Icon from 'react-icons-kit'
+import { bin } from 'react-icons-kit/icomoon'
+import { enlarge } from 'react-icons-kit/icomoon'
+import MessageWindow from './message_window'
 
 class Messages extends Component {
 
   state ={
     show: false,
-      id:'',
-      uname:'',
-      uemail:'',
-      uphone:'',
-      uinterest:'',
-      umessage:''
+    id:'',
+    uname:'',
+    uemail:'',
+    uphone:'',
+    uinterest:'',
+    umessage:''
   }
 
   enlargeMessage = (message) => {
-    let show = this.state.show;
+    let show = this.state.show
     this.setState({
       show: !show,
       id: message.id,
@@ -29,20 +29,20 @@ class Messages extends Component {
       uphone: message.uphone,
       uinterest: message.uinterest,
       umessage: message.umessage
-     });
+    })
   }
 
   handleDelete = (id) => {
-    console.log("id is: ", id);
-    this.props.deleteMsg(id);
-    this.props.history.push('/admin/messages');
+    console.log("id is: ", id)
+    this.props.deleteMsg(id)
+    this.props.history.push('/admin/messages')
   }
 
   render(){
 
     let messagesList = this.props.messages ? this.props.messages.map(message => {
       return(
-        <div>
+        <div key={ message.id }>
           <Row>
             <Col md="4">
               {message.uname}
@@ -67,13 +67,13 @@ class Messages extends Component {
           </Row>
         </div>
       )
-    }) : null;
+    }) : null
 
     return(
       <div className="container">
         <br/>
         <Row>
-          <Col md="7">
+          <Col md="8">
             <div className="card border-primary mb-3">
             <div className="card-header text-white bg-primary">MESSAGES</div>
               <div className="card-body text-primary">
@@ -81,19 +81,19 @@ class Messages extends Component {
               </div>
             </div>
           </Col>
-          <Col md="5">
+          <Col md="4">
             {this.state.show ? <MessageWindow message={this.state}/> : null}
           </Col>
         </Row>
       </div>
-    );
+    )
   }
 }
 
 function mapStateToProps(state, props){
   return{
-    messages: state.messages
+    messages: state.messages,
   }
 }
 
-export default connect(mapStateToProps, {deleteMsg})(Messages);
+export default connect(mapStateToProps, { deleteMsg })(Messages)

@@ -1,0 +1,42 @@
+.container-login {
+    /* width : 100vw;
+    height : 100vh;
+    display : flex;
+    justify-content : center;
+    align-items : center; */
+}
+
+.card-header {
+    background-color : rgb(31,31,31);
+    color : white;
+}
+
+.card-login {
+    margin-left : 50%;
+    position : absolute;
+    left : -200px;
+    width : 400px;
+    margin-top : 200px;
+    /* display : flex; */
+    /* justify-content : center; */
+    /* align-items : center; */
+    /* flex-flow : column nowrap; */
+    /* width : 300px; */
+}
+
+.card-body-login {
+    display : flex;
+    justify-content : center;
+    align-items : center;
+    flex-flow : column nowrap;
+}
+
+.card-login input {
+    min-width : 120px;
+    width : 50%;
+    margin-top : 20px;
+}
+
+.card-login input:last-child {
+    margin-bottom : 50px;
+}

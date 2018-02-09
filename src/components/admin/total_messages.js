@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Row, Col } from 'reactstrap';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { Row, Col } from 'reactstrap'
 
 class TotalMessage extends Component{
   render(){
-    console.log('message: ', this.props.messages);
-
     let potentialBuyers = this.props.messages ? this.props.messages.map(message => {
       return(
-        <Link to={`/admin/messages/`}>
-          <Row key={message.id}>
+        <Link key={message.id} to={`/admin/messages/`}>
+          <Row>
             <Col md="6">
               {message.uname}
             </Col>
@@ -20,7 +18,7 @@ class TotalMessage extends Component{
           </Row>
         </Link>
       )
-    }) : null;
+    }) : null
 
     return(
       <div>
@@ -31,7 +29,7 @@ class TotalMessage extends Component{
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -42,4 +40,4 @@ function mapStateToProps(state, props){
   }
 }
 
-export default connect(mapStateToProps, null)(TotalMessage);
+export default connect(mapStateToProps, null)(TotalMessage)

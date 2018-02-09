@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Row, Col, Alert } from 'reactstrap';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { createCar } from '../../actions/cars';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react'
+import { Form, FormGroup, Label, Input, Row, Col, Alert } from 'reactstrap'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { createCar } from '../../actions/cars'
+import { Link } from 'react-router-dom'
+
+import './newcar.css'
 
 class NewCar extends Component {
-
   state = {
     year: '',
     make: '',
@@ -34,9 +35,18 @@ class NewCar extends Component {
     alertMsg: false
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.createCar(this.state);
+  constructor(props) {
+    super(props)
+
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.alertMsgClose = this.alertMsgClose.bind(this)
+    this.handleUploadClick = this.handleUploadClick.bind(this)
+    this.readImageFile = this.readImageFile.bind(this)
+  }
+
+  handleSubmit(e) {
+    e.preventDefault()
+    this.props.createCar(this.state)
     this.setState({
       alertMsg: true,
       year: '',
@@ -65,8 +75,31 @@ class NewCar extends Component {
     })
   }
 
-  alertMsgClose = () => {
-    this.setState({ alertMsg: false });
+  alertMsgClose() {
+    this.setState({ alertMsg: false })
+  }
+
+  handleUploadClick() {
+    this.refs.fileUploader.click()
+  }
+
+  readImageFile(e) {
+    e.stopPropagation()
+    e.preventDefault()
+
+    const img = e.target.files[0]
+
+    if(img) {
+      const rdr = new FileReader()
+
+      rdr.onload = e => {
+        const el = this.refs.imgPreview
+        el.setAttribute('src', e.target.result)
+        el.setAttribute('alt', 'Image Preview')
+      }
+
+      rdr.readAsDataURL(img)
+    }
   }
 
   render() {
@@ -79,25 +112,51 @@ class NewCar extends Component {
           <div className="card-body text-primary">
             <Form onSubmit={this.handleSubmit}>
               <Row>
+                <Col md="12">
+                  <div className="img-default">
+                    <div className="wrapper" onClick={ this.handleUploadClick }>
+                      <input name="car-image" type="file" id="file" onChange={ this.readImageFile } ref="fileUploader" style={{ display : "none" }} />
+                      <img ref='imgPreview' className="rounded-flat" src={ require('./no-thumbnail.jpg') } alt="no-thumbnail" />
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+              <Row>
                 <Col md="3">
                   <FormGroup>
                     <Label for="year">Year</Label>
-                    <Input type="select" name="select" id="year"
+                    <Input
+                      type="select"
+                      name="select"
+                      id="year"
                       value={this.state.year}
                       onChange={(e) => this.setState({year: e.target.value})}
-                      >
+                    >
                       <option value="" disabled selected>Select Year</option>
                       <option>2018</option>
+                      <option>2017</option>
+                      <option>2016</option>
+                      <option>2015</option>
+                      <option>2014</option>
+                      <option>2013</option>
+                      <option>2012</option>
+                      <option>2011</option>
+                      <option>2010</option>
+                      <option>2009</option>
+                      <option>2008</option>
                     </Input>
                   </FormGroup>
                 </Col>
                 <Col md="3">
                   <FormGroup>
                     <Label for="make">Make</Label>
-                    <Input type="select" name="select" id="make"
+                    <Input
+                      type="select"
+                      name="select"
+                      id="make"
                       value={this.state.make}
                       onChange={(e) => this.setState({make: e.target.value})}
-                      >
+                    >
                       <option value="" disabled selected>Select Make</option>
                       <option>Audi</option>
                       <option>Honda</option>
@@ -111,10 +170,13 @@ class NewCar extends Component {
                 <Col md="3">
                   <FormGroup>
                     <Label for="model">Model</Label>
-                    <Input type="select" name="select" id="model"
+                    <Input
+                      type="select"
+                      name="select"
+                      id="model"
                       value={this.state.model}
                       onChange={(e) => this.setState({model: e.target.value})}
-                      >
+                    >
                       <option value="" disabled selected>Select Model</option>
                       <option>Accord</option>
                       <option>Odyssey</option>
@@ -136,10 +198,13 @@ class NewCar extends Component {
                 <Col md="3">
                   <FormGroup>
                     <Label for="body">Body</Label>
-                    <Input type="select" name="select" id="body"
+                    <Input
+                      type="select"
+                      name="select"
+                      id="body"
                       value={this.state.body_type}
                       onChange={(e) => this.setState({body_type: e.target.value})}
-                      >
+                    >
                       <option value="" disabled selected >Select Body</option>
                       <option>Convertible</option>
                       <option>Coupe</option>
@@ -249,15 +314,6 @@ class NewCar extends Component {
                 </Col>
                 <Col md="3">
                   <FormGroup>
-                    <Label for="link">Image Link</Label>
-                    <Input type="text" id="link"
-                      value={this.state.link}
-                      onChange={(e) => this.setState({link: e.target.value})}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col md="3">
-                  <FormGroup>
                     <Label for="electstab">Electronic stability</Label>
                     <Input type="text" id="electstab"
                       value={this.state.elect_stab}
@@ -265,8 +321,6 @@ class NewCar extends Component {
                     />
                   </FormGroup>
                 </Col>
-              </Row>
-              <Row>
                 <Col md="3">
                   <FormGroup>
                     <Label for="wireless">Wireless phone connectivity</Label>
@@ -276,6 +330,8 @@ class NewCar extends Component {
                     />
                   </FormGroup>
                 </Col>
+              </Row>
+              <Row>
                 <Col md="3">
                   <FormGroup>
                     <Label for="split">Split folding rear seat</Label>
@@ -303,8 +359,6 @@ class NewCar extends Component {
                     />
                   </FormGroup>
                 </Col>
-              </Row>
-              <Row>
                 <Col md="3">
                   <FormGroup>
                     <Label for="low">Low tire pressure warning</Label>
@@ -314,6 +368,8 @@ class NewCar extends Component {
                     />
                   </FormGroup>
                 </Col>
+              </Row>
+              <Row>
                 <Col md="3">
                   <FormGroup>
                     <Label for="wiper">Rear window wiper</Label>
@@ -333,7 +389,6 @@ class NewCar extends Component {
                   </FormGroup>
                 </Col>
                 <Col md="3">
-
                 </Col>
               </Row>
               <Row>
@@ -364,7 +419,7 @@ class NewCar extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -374,4 +429,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(null, mapDispatchToProps)(NewCar);
+export default connect(null, mapDispatchToProps)(NewCar)

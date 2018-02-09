@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 
 
@@ -17,9 +17,8 @@ class MessageWindow extends Component{
           <p className="card-text">Message: {this.props.message.umessage}</p>
         </div>
       </div>
-
-    );
+    )
   }
 }
 
-export default MessageWindow;
+export default MessageWindow

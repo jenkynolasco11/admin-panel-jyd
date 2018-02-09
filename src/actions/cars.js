@@ -24,6 +24,7 @@ export const createCar = (newCar) => {
   return async (dispatch) => {
     dispatch({ type: ADD_CAR_PENDING })
     let newcar = await axios.post('http://localhost:8000/car', newCar)
+
     dispatch({
       type: ADD_CAR_SUCCESS,
       payload: newcar
@@ -32,9 +33,9 @@ export const createCar = (newCar) => {
 }
 
 export const editCar = (editedCar) => {
-  console.log(editedCar, "*****");
+  console.log(editedCar, "*****")
   return async (dispatch) => {
-    dispatch({ type: EDIT_CAR_PENDING })
+    // dispatch({ type: EDIT_CAR_PENDING })
     let bodyObj = {
       car: {
         year: editedCar.year,
@@ -74,11 +75,15 @@ export const editCar = (editedCar) => {
 
 export const deleteCar = (carId) => {
   return async (dispatch) => {
-    dispatch({ type: REMOVE_CAR_PENDING })
-    let removedcar = await axios.delete(`http://localhost:8000/car/${carId}`)
+    // dispatch({ type: REMOVE_CAR_PENDING })
+    // let removedcar = await axios.delete(`http://localhost:8000/car/${carId}`)
+    // dispatch({
+    //   type: REMOVE_CAR_SUCCESS,
+    //   payload: removedcar
+    // })
     dispatch({
-      type: REMOVE_CAR_SUCCESS,
-      payload: removedcar
+      type : REMOVE_CAR_SUCCESS,
+      payload : carId
     })
   }
 }
