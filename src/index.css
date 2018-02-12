@@ -10,6 +10,11 @@
   color : red !important;
 }
 
+.nav-link a {
+  text-decoration : none;
+  color : red;
+}
+
 .logo-banner {
   position : absolute;
   margin-top : -25px;

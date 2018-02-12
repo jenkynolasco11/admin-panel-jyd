@@ -13,8 +13,8 @@ class Login extends Component {
     }
 
     state = {
-        user : 'demo',
-        pass : 'demo',
+        user : '',
+        pass : '',
         valid : false,
     }
 

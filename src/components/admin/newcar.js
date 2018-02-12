@@ -7,6 +7,115 @@ import { Link } from 'react-router-dom'
 
 import './newcar.css'
 
+const IMG_TYPES = ['image/gif', 'image/jpeg', 'image/png']
+
+const ImagePreview = props => (
+  <div className="image-preview">
+    <div className="close-button" onClick={ null } />
+    <img src={ props.src } alt="Image Preview" />
+  </div>
+)
+
+class ImageUploader extends Component {
+  constructor(props) {
+    super(props)
+
+    this.handleUploadClick = this.handleUploadClick.bind(this)
+    this.readImageFile = this.readImageFile.bind(this)
+    this.deleteImage = this.deleteImage.bind(this)
+  }
+
+  handleUploadClick() {
+    this.refs.fileUploader.click()
+  }
+
+  readImageFile(e) {
+    e.stopPropagation()
+    e.preventDefault()
+
+    const files = e.target.files
+    const imgs = Array.from(files).filter(f => IMG_TYPES.includes(f.type))
+    const data = {}
+
+    imgs.forEach(img => {
+      data[img.name] = {
+        loading : true,
+        src : null
+      }
+
+      const rdr = new FileReader()
+
+      rdr.onload = e => this.props.onChange({
+        [ img.name ] : {
+          loading : false,
+          src : e.target.result,
+          name : img.name
+        }
+      })
+
+      rdr.readAsDataURL(img)
+    })
+
+    this.props.onChange(data)
+    // if(IMG_TYPES.includes(img.type) ) {
+    //   const rdr = new FileReader()
+
+    //   rdr.onload = e => {
+    //     const el = this.refs.imgPreview
+    //     el.setAttribute('src', e.target.result)
+    //     el.setAttribute('alt', 'Image Preview')
+    //   }
+
+    //   rdr.readAsDataURL(img)
+    // }
+  }
+
+  deleteImage(name) {
+    const imgs = this.props.imgs
+
+    delete imgs[ name ]
+
+    this.props.onChange(imgs)
+  }
+
+  render() {
+    return (
+      <div className="img-uploader">
+        {/* <div className="wrapper" > */}
+          <input
+            name="car-image"
+            type="file"
+            id="file"
+            onChange={ this.readImageFile }
+            ref="fileUploader"
+            style={{ display : "none" }}
+            accept="image/*"
+            multiple
+          />
+          <div className="image-carousel">
+          {
+            Object.values(this.props.imgs).map(
+              ({ name, src, loading }) => (
+                <div key={ name } className="img-wrapper">
+                  <div className="image-delete" onClick={ () => this.deleteImage(name) }>X</div>
+                  {
+                    loading
+                    ? <div className=""> Loading Image... </div>
+                    : <img className="image-preview" src={ src } alt="image preview" />
+                  }
+                  <div className="image-name">{ name }</div>
+                </div>
+              )
+            )
+          }
+          </div>
+          <div className="cstm-input" onClick={ this.handleUploadClick }> Click to upload Images </div>
+        {/* </div> */}
+      </div>
+    )
+  }
+}
+
 class NewCar extends Component {
   state = {
     year: '',
@@ -31,7 +140,8 @@ class NewCar extends Component {
   	trip_comp: '',
   	tire_pressure: '',
   	wiper: '',
-  	headlight: '',
+    headlight: '',
+    imgs : {},
     alertMsg: false
   }
 
@@ -40,8 +150,6 @@ class NewCar extends Component {
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.alertMsgClose = this.alertMsgClose.bind(this)
-    this.handleUploadClick = this.handleUploadClick.bind(this)
-    this.readImageFile = this.readImageFile.bind(this)
   }
 
   handleSubmit(e) {
@@ -79,30 +187,8 @@ class NewCar extends Component {
     this.setState({ alertMsg: false })
   }
 
-  handleUploadClick() {
-    this.refs.fileUploader.click()
-  }
-
-  readImageFile(e) {
-    e.stopPropagation()
-    e.preventDefault()
-
-    const img = e.target.files[0]
-
-    if(img) {
-      const rdr = new FileReader()
-
-      rdr.onload = e => {
-        const el = this.refs.imgPreview
-        el.setAttribute('src', e.target.result)
-        el.setAttribute('alt', 'Image Preview')
-      }
-
-      rdr.readAsDataURL(img)
-    }
-  }
-
   render() {
+    const { imgs } = this.state
 
     return (
       <div className="container">
@@ -110,15 +196,15 @@ class NewCar extends Component {
         <div className="card border-primary mb-3">
           <div className="card-header text-white bg-primary">ADD NEW CAR</div>
           <div className="card-body text-primary">
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={ this.handleSubmit }>
               <Row>
                 <Col md="12">
-                  <div className="img-default">
-                    <div className="wrapper" onClick={ this.handleUploadClick }>
-                      <input name="car-image" type="file" id="file" onChange={ this.readImageFile } ref="fileUploader" style={{ display : "none" }} />
-                      <img ref='imgPreview' className="rounded-flat" src={ require('./no-thumbnail.jpg') } alt="no-thumbnail" />
-                    </div>
-                  </div>
+                  <ImageUploader
+                    imgs={ imgs }
+                    onChange={
+                      (mult = {}) => this.setState({ imgs : { ...imgs, ...mult } })
+                    }
+                  />
                 </Col>
               </Row>
               <Row>

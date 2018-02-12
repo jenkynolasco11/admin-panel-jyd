@@ -4,7 +4,7 @@ import {
 } from '../actions/app'
 
 const defaultState = {
-    logged : false
+    logged : true
 }
 
 export default (state = defaultState, { type, payload }) => {
