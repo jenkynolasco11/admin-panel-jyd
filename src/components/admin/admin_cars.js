@@ -1,66 +1,113 @@
 import React, { Component } from 'react'
-import { Table, Row, Col } from 'reactstrap'
+import { Table, Row, Col, Tooltip } from 'reactstrap'
 import { connect } from 'react-redux'
-import { deleteCar } from '../../actions/cars'
+import { bindActionCreators } from 'redux'
 import Icon from 'react-icons-kit'
-import { bin } from 'react-icons-kit/icomoon'
-import { pencil } from 'react-icons-kit/icomoon'
+import { bin, pencil, envelop, coinDollar } from 'react-icons-kit/icomoon'
+import { androidCar, androidMail, androidFavorite } from 'react-icons-kit/ionicons'
 import { Link } from 'react-router-dom'
-import TotalMessage from './total_messages'
-import TotalInventory from './total_inventory'
-import Specials from './specials'
 
+import { deleteCar, getCars } from '../../actions/car'
+import { getStats } from '../../actions/app'
+
+class Inventory extends Component {
+  state = { toolTip : false }
+
+  render() {
+    return (
+      <tbody>
+        {
+          this.props.cars.map((car, i) => (
+            <tr key={ car.id }>
+              <th scope="row">{car.id}</th>
+              <td>{car.year}</td>
+              <td>{car.make}</td>
+              <td>{car.model}</td>
+              <td>{car.bodyType}</td>
+              <td>{car.outColor}</td>
+              <td>{car.price}</td>
+              <td>{car.status}</td>
+              <td>
+                <Link to={`/admin/car-add-edit/${ car.id }`}>
+                  <Icon icon={pencil}/>
+                </Link>
+              </td>
+              <td>
+                <Icon
+                  className="text-danger delete-car"
+                  icon={bin}
+                  onClick={()=> this.props.handleDelete(car.id)}
+                />
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    )
+  }
+}
 class Cars extends Component {
 
-  handleDelete = (id) => {
-    this.props.deleteCar(id)
+  constructor(props) {
+    super(props)
+
+    this.handleDelete = this.handleDelete.bind(this)
+  }
+
+  handleDelete(id) {
+    if(confirm("Are you sure you want to delete this item?")) return this.props.deleteCar(id) // eslint-disable-line
+  }
+
+  componentDidMount() {
+    this.props.getCars()
+    this.props.getStats()
   }
 
   render(){
-    let inventory = this.props.cars ? this.props.cars.map(car => {
-      return(
-        <tr key={ car.id }>
-          <th scope="row">{car.id}</th>
-          <td>{car.year}</td>
-          <td>{car.make}</td>
-          <td>{car.model}</td>
-          <td>{car.body_type}</td>
-          <td>{car.int_color}</td>
-          <td>{car.price}</td>
-          <td>{car.status ? "Available" : "Sold"}</td>
-          <td>
-            <Link to={`/admin/editcar/${car.id}`}>
-              <Icon icon={pencil} />
-            </Link>
-          </td>
-          <td><Icon
-            className="text-danger"
-            icon={bin}
-            onClick={(e)=>this.handleDelete(car.id)}
-          /></td>
-        </tr>
-      )
-    }) : null
-
-    let totalInventory = this.props.cars ? this.props.cars : null
-    let totalMessages = this.props.messages ? this.props.messages : null
-    let specials = this.props.cars ? this.props.cars : null
+    const { inbox = 0, toSell = 0, builds = 0, interested = 0 } = this.props.stats
 
     return(
       <div className="container">
         <br/>
-        <Row>
+        <div className="card mb-3">
+          <div className="card-header bg-primary"> SUMMARY </div>
+          <div className="card-body" style={{ border : '1px solid black' }}>
+            <Row>
+              <Col md="4" className="text-center">
+                <Link to={'/admin/messages'}>
+                  <Icon icon={androidMail} className="text-danger" /> { `INBOX ${ inbox ? `(${inbox})` : '' }` }
+                </Link>
+              </Col>
+              {/* <Col md="3">
+                <Link to={'#'}>
+                  <Icon icon={pencil} className="text-danger" /> { `SELLS ${ toSell ? `(${toSell})` : '' }` }
+                </Link>
+              </Col> */}
+              <Col md="4" className="text-center" >
+                <Link to={'#'}>
+                  <Icon icon={androidCar} className="text-danger" /> { `BUILDS ${ builds ? `(${builds})` : ''}` }
+                </Link>
+              </Col>
+              <Col md="4" className="text-center" >
+                <Link to={'#'}>
+                  <Icon icon={androidFavorite} className="text-danger" /> { `INTERESTED ${ interested ? `(${interested})` : '' }` }
+                </Link>
+              </Col>
+            </Row>
+          </div>
+        </div>
+        {/* <Row>
           <Col md="4">
             <TotalMessage totalMessages={totalMessages}/>
           </Col>
           <Col md="4">
-            <TotalInventory totalInventory={totalInventory} />
+            <TotalInventory cars={cars} />
           </Col>
           <Col md="4">
             <Specials specials={specials}/>
           </Col>
-        </Row>
-        <br/>
+        </Row> */}
+        {/* <br/> */}
         <div className="card border-primary mb-3">
           <div className="card-header text-white bg-primary">INVENTORY</div>
           <div className="card-body">
@@ -79,9 +126,7 @@ class Cars extends Component {
                   <th>DELETE</th>
                 </tr>
               </thead>
-              <tbody>
-                {inventory}
-              </tbody>
+              <Inventory cars={ this.props.cars } handleDelete={ this.handleDelete }/>
             </Table>
           </div>
         </div>
@@ -92,9 +137,18 @@ class Cars extends Component {
 
 function mapStateToProps(state, props){
   return{
-    cars: state.cars,
-    messages: state.messages
+    cars: state.car,
+    messages: state.messages,
+    stats : state.app.stats
   }
 }
 
-export default connect(mapStateToProps, { deleteCar })(Cars)
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    getCars,
+    deleteCar,
+    getStats
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cars)

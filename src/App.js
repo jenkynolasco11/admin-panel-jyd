@@ -1,34 +1,29 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { getCars } from './actions/cars'
-import { getMessages } from './actions/message'
-
-// // User Components
-// import NavigationBar from './components/user/navigation_bar'
-// import TopSearchBar from './components/user/top_search_bar'
-// import FooterTop from './components/user/footer_top'
-// import FooterBottom from './components/user/footer_bottom'
-// import UserHomePage from './components/user/home'
-// import CarsList from './components/user/cars_list'
-// import OneCar from './components/user/one_car'
 
 // Admin Components
-import AdminNavigatioBar from './components/admin/admin_top_navigation'
+import AdminNavigationBar from './components/admin/admin_top_navigation'
 import Cars from './components/admin/admin_cars'
 import NewCar from './components/admin/newcar'
-import Messages from './components/admin/messages'
-import EditCar from './components/admin/edit_car'
 import Login from './components/login'
+import Messages from './components/messages/messages'
+
+import { getCars } from './actions/car'
+import { getMessages } from './actions/message'
+import { checkAuth, connectSocket } from './actions/app'
+
+const test = true
 
 const AdminRoutes = () => (
     <React.Fragment>
-      <AdminNavigatioBar />
+      <AdminNavigationBar />
       <Route exact path="/admin" component={ Cars } />
-      <Route exact path="/admin/newcar" component={ NewCar } />
-      <Route exact path="/admin/editcar/:id" component={ EditCar } />
+      <Route exact path="/admin/car-add-edit/:id?" component={ NewCar } />
       <Route exact path="/admin/messages" component={ Messages } />
+      {/* <Route exact path="/admin/editcar/:id" component={ EditCar } /> */}
+      {/* <Route exact path="/admin/messages" component={ Messages } /> */}
     </React.Fragment>
 )
 
@@ -36,18 +31,30 @@ const Routes = () => (
   <Router>
     <Switch>
       <Route component={ AdminRoutes }  path="/" />
-      <Route component={ AdminRoutes } />
+      <Redirect to="/admin"/>
+      {/* <Route component={ AdminRoutes } /> */}
     </Switch>
   </Router>
 )
 
 class App extends Component {
-  componentDidMount(){
-    // this.props.getCars()
-    // this.props.getMessages()
+  componentDidMount() {
+    this.props.checkAuth()
+    this.props.connectSocket()
+  }
+
+  componentWillUnmount() {
+    try{
+      this.props.socket.disconnect()
+    } catch(e) {
+      console.log(e)
+    }
   }
 
   render() {
+
+    if(test) return <Routes />
+
     return (
       <div className="App">
         {
@@ -63,14 +70,25 @@ class App extends Component {
 function mapStateToProps(state) {
   const { app } = state
 
-  return { isLoggedIn : app.logged }
-}
-
-function mapDispatchToProps(dispatch){
-  return{
-      getCars: bindActionCreators(getCars, dispatch),
-      getMessages: bindActionCreators(getMessages, dispatch)
+  return {
+    isLoggedIn : app.logged,
+    socket : app.socket
   }
 }
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  getCars,
+  getMessages,
+  checkAuth,
+  connectSocket
+}, dispatch)
+
+// function mapDispatchToProps(dispatch){
+//   return{
+//       getCars: bindActionCreators(getCars, dispatch),
+//       getMessages: bindActionCreators(getMessages, dispatch),
+//       checkAuth : bindActionCreators(checkAuth, dispatch),
+//   }
+// }
 
 export default connect(mapStateToProps, mapDispatchToProps) (App)

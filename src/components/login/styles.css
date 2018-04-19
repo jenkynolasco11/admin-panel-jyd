@@ -33,7 +33,8 @@
 
 .card-login input {
     min-width : 120px;
-    width : 50%;
+    text-align : center;
+    /* width : 50%; */
     margin-top : 20px;
 }
 

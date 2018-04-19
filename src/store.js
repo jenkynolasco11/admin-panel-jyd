@@ -10,10 +10,9 @@ import thunkMiddleware from 'redux-thunk'
 //   basname: '',
 //   hashType: 'slash'
 // })
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunkMiddleware/*, routerMiddleware(history)*/)
+)
 
-export default(initialState) => {
-    return createStore(
-      rootReducer,
-      applyMiddleware(thunkMiddleware/*, routerMiddleware(history)*/)
-    )
-}
+export default store

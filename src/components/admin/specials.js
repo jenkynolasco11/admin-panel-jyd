@@ -29,7 +29,7 @@ class Specials extends Component{
 
 function mapStateToProps(state, props){
   return{
-    cars: state.cars.filter(car => car.sale > 0)
+    cars: state.car.filter(car => car.sale > 0)
   }
 }
 

@@ -1,6 +1,6 @@
-import cars from './cars'
+import car from './car'
 import filtered from './filter'
-import messages from './message'
+import message from './message'
 import app from './app'
 import { reducer as formReducer } from 'redux-form'
 import { combineReducers } from 'redux'
@@ -8,8 +8,8 @@ import { combineReducers } from 'redux'
   const rootReducer = combineReducers({
     app,
     filtered,
-    cars,
-    messages,
+    car,
+    message,
     form: formReducer
   })
 

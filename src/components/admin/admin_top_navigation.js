@@ -6,7 +6,7 @@ import {
     NavbarBrand,
     Nav,
     NavItem,
-    NavLink,
+    // NavLink,
     UncontrolledDropdown,
     DropdownToggle,
     DropdownMenu,
@@ -14,10 +14,12 @@ import {
 } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import Icon from 'react-icons-kit'
-import { car } from 'react-icons-kit/fa/car'
 
-import { tryLogin } from '../../actions/app'
+import logo from './dealer-logo.png'
+// import Icon from 'react-icons-kit'
+// import { car } from 'react-icons-kit/fa/car'
+
+import { logoutUser } from '../../actions/app'
 
 class AdminNavigatioBar extends React.Component {
     constructor(props) {
@@ -36,7 +38,7 @@ class AdminNavigatioBar extends React.Component {
                 <Navbar color="primary" dark expand="md">
                     <div className="container">
                         <NavbarBrand href="/admin/">
-                            <img className="logo-banner" src={ require('./dealer-logo.png') } alt="logo-image"/>
+                            <img className="logo-banner" src={ logo } alt="company logo"/>
                         </NavbarBrand>
                         <NavbarToggler onClick={ this.toggle }/>
                             <Collapse isOpen={ this.state.isOpen } navbar>
@@ -45,20 +47,23 @@ class AdminNavigatioBar extends React.Component {
                                         <Link className="nav-link" to="/admin">HOME</Link>
                                     </NavItem>
                                     <NavItem>
-                                            <Link className="nav-link" to="/admin/newcar"> ADD NEW CAR</Link>
+                                            <Link className="nav-link" to="/admin/messages"> MESSAGES </Link>
                                     </NavItem>
                                     <NavItem>
-                                        <Link className="nav-link" to="/admin/messages">MESSAGES</Link>
+                                            <Link className="nav-link" to="/admin/car-add-edit"> ADD NEW CAR</Link>
                                     </NavItem>
+                                    {/* <NavItem>
+                                        <Link className="nav-link" to="/admin/messages">MESSAGES</Link>
+                                    </NavItem> */}
                                     <UncontrolledDropdown nav>
                                         <DropdownToggle nav caret>
                                             ADMIN
                                         </DropdownToggle>
                                         <DropdownMenu>
-                                            <DropdownItem>
+                                            {/* <DropdownItem>
                                                 PROFILE
-                                            </DropdownItem>
-                                            <DropdownItem onClick = { e => this.props.tryLogin(false) }>
+                                            </DropdownItem> */}
+                                            <DropdownItem onClick = { e => this.props.logoutUser() }>
                                                 LOGOUT
                                             </DropdownItem>
                                         </DropdownMenu>
@@ -72,4 +77,4 @@ class AdminNavigatioBar extends React.Component {
     }
 }
 
-export default connect(null, { tryLogin })(AdminNavigatioBar)
+export default connect(null, { logoutUser })(AdminNavigatioBar)

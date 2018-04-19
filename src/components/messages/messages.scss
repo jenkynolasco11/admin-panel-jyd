@@ -1,0 +1,165 @@
+th, td {
+    line-height : 24px;
+    text-align : center;
+    width : 100px;
+
+    &:nth-child(2) {
+        width : 200px;
+    }
+
+    &:nth-child(5) {
+        width : 150px;
+    }
+    overflow : hidden;
+}
+
+svg {
+    color : red;
+    transition : all .1s linear;
+    cursor : pointer;
+}
+
+svg:hover {
+    color : rgb(72, 0, 0);
+    font-size : 32px;
+}
+
+.messages-board {
+    min-height : 500px;
+}
+
+.preview-message {
+    // position : fixed;
+    // top : 0;
+    // left : 0;
+
+    // &:after {
+    //     position : absolute;
+    //     content : '';
+    //     width : 100vw;
+    //     height : 100vh;
+    //     z-index : -100;
+
+    //     background-color: rgba(0, 0, 0, 0.611);
+    // }
+
+    .card-header {
+        .preview-message__close {
+            transition : all .1s linear;
+            cursor : pointer;
+
+            &:hover {
+                color : red;
+            }
+        }
+
+        .preview-message__date {
+            float : right;
+        }
+    }
+
+    &__body {
+        background-color : white;
+        border-radius : 2px;
+
+        [class*=__item] {
+            position : relative;
+            margin-bottom : 5px;
+
+            div:first-child {
+                min-width : 100px;
+            }
+
+            div {
+                display : inline-block;
+            }
+        }
+
+        &-info {
+            border-bottom : 1px solid black;
+            margin-bottom : 22px;
+        }
+
+        .preview-message__content {
+            padding : 0 20px;
+        }
+    }
+}
+
+.message-list {
+    tr {
+        color : #222;
+        border-bottom : 1px solid #eee;
+
+        &:last-child {
+            border : none;
+        }
+
+        &.selected {
+            background-color : #ccc;
+        }
+
+        .badge {
+            width : 100%;
+            height : 20px;
+            color : white !important;
+            border : 1px solid #eee;
+            border-radius : 2px;
+
+            &.sell {
+                background-color : rgb(232, 56, 56);
+            }
+
+            &.credit {
+                background-color : rgb(193, 150, 44);
+            }
+
+            &.message {
+                background-color : rgb(78, 109, 112);
+            }
+        }
+
+        &.not-read {
+            color : red;
+        }
+    }
+}
+
+.table-pagination {
+    display : flex;
+    width : 100%;
+    justify-content : center;
+    margin-bottom : 20px;
+
+    & > [class*=table-pagination] {
+        cursor : pointer;
+        margin : 2px;
+        border : 1px solid black;
+        border-radius : 2px;
+        background-color : #eee;
+        display : flex;
+        justify-content: center;
+        align-items : center;
+
+        transition : all .1s linear;
+        height : 40px;
+        width : 40px;
+
+        &:hover {
+            background-color : #bbb;
+            color : white;
+        }
+
+        &.selected {
+            background-color : rgb(75, 75, 75);
+            color : red;
+            font-weight : bold;
+
+            &:hover {
+                background-color : rgb(21, 21, 21);
+                color : rgb(157, 0, 0);
+            }
+        }
+
+    }
+}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { editCar } from '../../actions/cars'
+import { editCar } from '../../actions/car'
 import { Form, FormGroup, Label, Row, Col } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import { Field, reduxForm } from 'redux-form'
@@ -235,7 +235,7 @@ class EditCar extends Component{
 
 function mapStateToProps(state, props){
   return{
-    initialValues: state.cars.filter(car => car.id === props.match.params.id)[0]
+    initialValues: state.car.filter(car => car.id === props.match.params.id)[0]
   }
 }
 

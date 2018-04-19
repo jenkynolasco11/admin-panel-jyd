@@ -1,21 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { tryLogin } from '../../actions/app'
-import { Card, CardBody, CardTitle, CardHeader, Container, Input, CardFooter } from 'reactstrap'
+import { loginUser } from '../../actions/app'
+import { Form, Card, CardBody, CardTitle, CardHeader, Container, Input } from 'reactstrap'
 // import { connect, bindActionCreators } from 'react-redux';
 
 import './styles.css'
 
 class Login extends Component {
-    tmpState = {
-        user : 'demo',
-        pass : 'demo'
-    }
-
     state = {
-        user : '',
-        pass : '',
-        valid : false,
+        user : 'jydauto',
+        pass : 'jydautoleasing123',
+        invalid : false,
     }
 
     constructor(props) {
@@ -31,48 +26,53 @@ class Login extends Component {
         return this.setState({ [ name ] : val })
     }
 
-    _onSubmit(user, pass) {
-        // console.log(user, pass)
+    _onSubmit(e) {
+        e.preventDefault()
+        const { user, pass } = this.state
         const tmp = this.tmpState
-        if(user !== tmp.user || pass !== tmp.pass ) return this.setState({ valid : true }, () => { setTimeout(() => this.setState({ valid : false }), 4000) })
 
-        // console.log(this.props.tryLogin)
-        this.props.login(true)
+        // if(user !== tmp.user || pass !== tmp.pass ) return this.setState({ invalid : true }, () => setTimeout(() => this.setState({ invalid : false }), 4000))
+
+        this.props.login({ user, pass })
     }
 
     render() {
-        const { user, pass, valid } = this.state
+        const { user, pass, invalid } = this.state
 
         return (
             <Container className="container-login">
-                <Card className="card-login">
+                <Card className="card-login"  style={{ border : '1px solid black' }}>
                     <CardHeader>
                         <CardTitle>Login</CardTitle>
                     </CardHeader>
                     <CardBody className="card-body-login">
-                        <Input
-                            type="text"
-                            onChange={ e => this._onChange(e, 'user') }
-                            value={ user }
-                        />
-                        <Input
-                            type="password"
-                            onChange={ e => this._onChange(e, 'pass') }
-                            value={ pass }
-                        />
-                        <Input
-                            onClick={ () => this._onSubmit(user, pass) }
-                            type="button"
-                            value="Login"
-                        />
+                        <Form onSubmit={ this._onSubmit } xs="12">
+                            <Input
+                                placeholder="username"
+                                type="text"
+                                onChange={ e => this._onChange(e, 'user') }
+                                value={ user }
+                            />
+                            <Input
+                                placeholder="password"
+                                type="password"
+                                onChange={ e => this._onChange(e, 'pass') }
+                                value={ pass }
+                            />
+                            <Input
+                                // onClick={ () => this._onSubmit(user, pass) }
+                                type="submit"
+                                value="Login"
+                            />
+                        </Form>
                     </CardBody>
-                    {
-                        valid &&
+                    {/*
+                        invalid &&
                         <CardFooter>
                             <div>Please, enter a valid user/pass</div>
                             <div>(user: demo, pass: demo)</div>
                         </CardFooter>
-                    }
+                     */}
                 </Card>
             </Container>
         );
@@ -80,7 +80,7 @@ class Login extends Component {
 }
 
 const mapStateToProps = dispatch => ({
-    login : isLogin => dispatch(tryLogin(isLogin))
+    login : data => dispatch(loginUser(data))
 })
 
 export default connect(null, mapStateToProps)(Login)
