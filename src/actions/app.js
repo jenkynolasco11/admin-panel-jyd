@@ -1,9 +1,7 @@
 import axios from 'axios'
 import IO from 'socket.io-client'
 
-import socketFunctions from '../socket-options'
-
-import { getMessages } from './message'
+import socketFunctions from '../socketOptions'
 
 export const TRY_LOGIN_SUCCESS = 'TRY_LOGIN_SUCCESS'
 export const TRY_LOGIN_FAILED = 'TRY_LOGIN_FAILED'
@@ -84,13 +82,14 @@ export const getStats = () => async dispatch => {
 
 export const connectSocket = () => async dispatch => {
     let socket = null
+
     try {
-        socket = IO()
+        socket = IO('/admin')
 
         socketFunctions(socket, dispatch)
     } catch (e) {
         console.log(e)
     }
 
-    dispatch({ type : SOCKET_CONNECTION, payload : socket })
+    return dispatch({ type : SOCKET_CONNECTION, payload : socket })
 }

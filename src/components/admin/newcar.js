@@ -10,12 +10,12 @@ import './newcar.scss'
 
 const IMG_TYPES = ['image/gif', 'image/jpeg', 'image/png']
 
-const ImagePreview = props => (
-  <div className="image-preview">
-    <div className="close-button" onClick={ null } />
-    <img src={ props.src } alt="Preview" />
-  </div>
-)
+// const ImagePreview = props => (
+//   <div className="image-preview">
+//     <div className="close-button" onClick={ null } />
+//     <img src={ props.src } alt="Preview" />
+//   </div>
+// )
 
 class ImageUploader extends Component {
   constructor(props) {

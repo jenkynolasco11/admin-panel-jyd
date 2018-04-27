@@ -109,8 +109,14 @@ body {
   height: auto;
   border-radius: 5px;
 }
+
+table th {
+  text-align : center;
+}
+
 .table td {
-  border: none;
+  /* border: none; */
+  text-align : center;
   line-height: 1em;
 }
 .social-icons{

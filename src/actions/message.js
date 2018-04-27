@@ -41,6 +41,16 @@ export const setMessageToRead = ({ id, type }) => async dispatch => {
   }
 }
 
+export const replyToMessage = ({ id, type, reply }) => async dispatch => {
+  try {
+    const { data } = await axios.post(`/message/reply`, { id, type, reply })
+
+    if(data.ok) return dispatch(getMessages())
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 export const setSkipValue = skip => dispatch => {
   dispatch({ type : SET_SKIP_VALUE, payload : skip })
 

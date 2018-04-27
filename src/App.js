@@ -9,6 +9,7 @@ import Cars from './components/admin/admin_cars'
 import NewCar from './components/admin/newcar'
 import Login from './components/login'
 import Messages from './components/messages/messages'
+import Chat from './components/chat'
 
 import { getCars } from './actions/car'
 import { getMessages } from './actions/message'
@@ -53,13 +54,21 @@ class App extends Component {
 
   render() {
 
-    if(test) return <Routes />
+    if(test) return (
+      <React.Fragment>
+        <Routes />
+        <Chat />
+      </React.Fragment>
+    )
 
     return (
       <div className="App">
         {
           this.props.isLoggedIn
-          ? <Routes />
+          ?   <React.Fragment>
+                <Routes />
+                <Chat />
+              </React.Fragment>
           : <Login />
         }
       </div>

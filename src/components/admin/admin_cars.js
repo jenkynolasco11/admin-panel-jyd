@@ -1,21 +1,23 @@
 import React, { Component } from 'react'
-import { Table, Row, Col, Tooltip } from 'reactstrap'
+import { Table, Row, Col } from 'reactstrap'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Icon from 'react-icons-kit'
-import { bin, pencil, envelop, coinDollar } from 'react-icons-kit/icomoon'
+import { bin, pencil } from 'react-icons-kit/icomoon'
 import { androidCar, androidMail, androidFavorite } from 'react-icons-kit/ionicons'
 import { Link } from 'react-router-dom'
 
 import { deleteCar, getCars } from '../../actions/car'
 import { getStats } from '../../actions/app'
 
+import './admin.scss'
+
 class Inventory extends Component {
   state = { toolTip : false }
 
   render() {
     return (
-      <tbody>
+      <tbody className="t-body">
         {
           this.props.cars.map((car, i) => (
             <tr key={ car.id }>
@@ -64,7 +66,7 @@ class Cars extends Component {
   }
 
   render(){
-    const { inbox = 0, toSell = 0, builds = 0, interested = 0 } = this.props.stats
+    const { inbox = 0, /*toSell = 0,*/ builds = 0, interested = 0 } = this.props.stats
 
     return(
       <div className="container">
@@ -108,11 +110,11 @@ class Cars extends Component {
           </Col>
         </Row> */}
         {/* <br/> */}
-        <div className="card border-primary mb-3">
+        <div className="card border-primary mb-3 car-table">
           <div className="card-header text-white bg-primary">INVENTORY</div>
           <div className="card-body">
             <Table hover>
-              <thead className="text-success">
+              <thead className="text-success t-head">
                 <tr>
                   <th>ID</th>
                   <th>YEAR</th>

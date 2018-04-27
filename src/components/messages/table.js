@@ -13,7 +13,7 @@ const formatPhone = s => {
 
 const TableHeader = () => {
     return (
-        <thead>
+        <thead className="text-success">
             <tr>
                 <th>NAME</th>
                 <th>EMAIL</th>
@@ -34,7 +34,7 @@ const TableBody = props => {
             {
                 props.msgs.map((msg, i) => (
                     <tr
-                        className={ `table-row__item ${ msg.reviewed ? '' : 'not-read' } ${ props.selected ? props.selected._id === msg._id ? ' selected' : '' : '' }` }
+                        className={ `table-row__item ${ msg.reply.length ? 'replied' : '' } ${ msg.reviewed ? '' : 'not-read' } ${ props.selected ? props.selected._id === msg._id ? ' selected' : '' : '' }` }
                         key={ msg._id }
                         onClick={ () => props.onPreviewMessage(msg) }
                     >
@@ -55,7 +55,7 @@ const TableBody = props => {
                         </td>
                         <td>{ new Date(msg.createdBy).toLocaleString() }</td>
                         <td>
-                            <Icon icon={ reply }/>
+                            <Icon icon={ reply } onClick={ props.onReplyClick }/>
                         </td>
                     </tr>
                 ))
@@ -76,6 +76,7 @@ class MessagesTable extends Component {
                             msgs={ this.props.messages }
                             onPreviewMessage={ this.props.onRowClick }
                             selected={ this.props.selectedMessage ? this.props.selectedMessage : {} }
+                            onReplyClick={ this.props.onReplyClick }
                         />
                     </Table>
                 </div>

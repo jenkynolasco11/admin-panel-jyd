@@ -1,0 +1,352 @@
+$messageClientClr: #FF9292;
+$messageCompanyClr: red;
+$chatColor: black; // #FF9292;
+$handleBg: black; // #FF5C5F;
+$arrowClr: white;
+$arrowHoverClr: red;
+$messageBoxClr: white;
+$messageBoxSendBtn: #E41313;
+$messageBoxTextClr: #222;
+// ================================
+$chatBg: #222;
+$contactsBg: gray;
+$selectedChatClr: #AEB7FF;
+.chat {
+    transition : all .1s ease-in-out;
+    position : absolute;
+    width : 100vw;
+    left : 100vw;
+    top : 20vh;
+
+    .toggle-chat {
+        position : absolute;
+        background-color : $chatBg;
+        // margin-top : -50px;
+        cursor : pointer;
+        left : -50px;
+        height : 50px;
+        width : 50px;
+        display : flex;
+        justify-content : center;
+        align-items : center;
+
+        .messages-badge {
+            position : absolute;
+            left : -5px;
+            top : -5px;
+            background-color : red;
+            height : 20px;
+            width : 20px;
+            display : flex;
+            justify-content : center;
+            align-items : center;
+            color : white;
+            font-size : 12px;
+            border-radius : 50%;
+            z-index : 1;
+        }
+
+
+        svg {
+            position : absolute;
+            fill : white;
+            stroke : white;
+        }
+    }
+
+    &.open {
+        left : 0;
+
+        .toggle-chat {
+            margin-top : -50px;
+            left : 40px;
+        }
+    }
+
+    #chat-room {
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        display: flex;
+        flex-flow: row wrap;
+        max-height: 600px;
+        min-width: 200px; // max-width: 980px;
+        background-color: $chatBg;
+        .chat-clients {
+            padding: 2px;
+            flex: 1;
+            min-width: 200px; // max-height : 300px;
+            overflow-y: scroll;
+            // background-color: $contactsBg; // width : 160px;
+            background-color: white; // border-right : 2px solid red;
+            max-height : 590px;
+            .empty {
+                height: 100%;
+                background-color: rgb(197, 197, 197);
+                display: flex;
+                justify-content: center;
+                align-items: center; // padding : 40px 20px;
+                text-align: center;
+                transition: all .05s linear;
+                &:hover {
+                    color: white;
+                    cursor: not-allowed; // background-color: rgb(163, 163, 163);
+                }
+            }
+            .client {
+                padding: 20px 20px;
+                background-color: #93DAFF;
+                position: relative;
+                border-radius : 30px/30px;
+                margin : 10px 4px 0;
+
+                .text {
+                    cursor: pointer;
+                    color: rgb(45, 0, 0);
+                    display : flex;
+                    flex-flow : column nowrap;
+                    .small {
+                        margin-top : -4px;
+                        font-size : 10px;
+                        color : rgb(225, 127, 127);
+                    }
+                }
+                &.new-message {
+                    .text {
+                        color: red;
+                        animation: wiggle-animation 1s linear infinite;
+                    }
+                }
+                // &:nth-child(even) {
+                //     background-color: rgb(255, 217, 217);
+                // }
+                &.selected {
+                    background-color: $selectedChatClr;
+                    color: white;
+                    .text {
+                        $text-shadow : rgb(198, 198, 198);
+                        color: rgb(255, 255, 255);
+                        text-shadow : -1px 1px 1px $text-shadow, 1px 1px 1px $text-shadow, 1px -1px 1px $text-shadow, -1px -1px 1px $text-shadow;
+                    } // &:before {
+                    //   z-index : 1000;
+                    //   right : 0px;
+                    //   top : 0;
+                    //   position : absolute;
+                    //   content : '';
+                    //   // border-left : 50px solid $selectedChatClr;
+                    //   border-left : 60px solid red;
+                    //   border-top : 30px solid transparent;
+                    //   border-bottom : 30px solid transparent;
+                    // }
+                }
+                &.on-chat {
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        background-color: #63FE66;
+                        border-radius: 50%;
+                        height: 22px;
+                        width: 22px;
+                        right: 14px;
+                        top: 25px;
+                    }
+                }
+
+                .messages-badge {
+                    position : absolute;
+                    right : 0;
+                    background-color : red;
+                    height : 20px;
+                    width : 20px;
+                    display : flex;
+                    justify-content : center;
+                    align-items : center;
+                    color : white;
+                    font-size : 12px;
+                    border-radius : 50%;
+                    top : 0;
+                    // top : 21px;
+                }
+            }
+        }
+        .chat-box {
+            flex: 2; // width : 500px;
+            // height : 600px;
+            display: flex;
+            flex-flow: column nowrap;
+            .messages {
+                margin: 10px;
+                padding: 2px;
+                height: 500px;
+                overflow-y: scroll; // background-color : $chatBg;
+                background-color: white;
+                padding: 10px;
+                .message {
+                    opacity : 0;
+                    position : relative;
+                    margin: 40px 20px 10px;
+                    padding: 14px;
+                    font-size: 16px;
+                    animation : appearing .2s linear forwards;
+
+                    &:first-child {
+                        margin-top: 10px;
+                    }
+                    &:last-child {
+                        margin-bottom: 40px;
+                    }
+                    .timestamp {
+                        font-size: 10px;
+                        color: #444;
+                        letter-spacing : 0.5px;
+                    }
+                    .text {
+                        color: white;
+                        letter-spacing : 0.3px;
+                    }
+                    &.client {
+                        border-radius: 8px 8px 0 8px;
+                        background-color: $messageClientClr;
+                        .text {
+                            text-align: right;
+                        }
+                        &:after {
+                            right: 0;
+                            bottom: -20px;
+                            border-top: 10px solid $messageClientClr;
+                            border-right: 10px solid $messageClientClr;
+                            border-left: 10px solid transparent;
+                            border-bottom: 10px solid transparent;
+                            z-index: 1;
+                            content: '';
+                            position: absolute;
+                        }
+
+                        .timestamp {
+                            color : rgb(255, 244, 244);
+                            // // // // text-shadow : 0 2px 1px black, 2px 2px 1px black, 2px 0 1px black, 0 0 1px black;
+                        }
+                    }
+                    &.company {
+                        border-radius: 8px 8px 8px 0;
+                        background-color: $messageCompanyClr;
+                        &:after {
+                            left: 0;
+                            bottom: -20px;
+                            border-top: 10px solid $messageCompanyClr;
+                            border-left: 10px solid $messageCompanyClr;
+                            border-right: 10px solid transparent;
+                            border-bottom: 10px solid transparent;
+                            z-index: 1;
+                            content: '';
+                            position: absolute;
+                        }
+
+                        .timestamp {
+                            color : white;
+                        }
+                    }
+                }
+            }
+            .message-box {
+                background-color: $chatBg;
+                padding: 10px;
+                display: flex;
+                flex-flow: row nowrap;
+                [type=text] {
+                    flex: 1;
+                    padding: 10px;
+                    background-color: transparent;
+                    border: none;
+                    color: white;
+                    transition: all .1s linear;
+                    &:hover {
+                        background-color: $chatBg * 1.2;
+                    }
+                    ::placeholder {
+                        /* Chrome, Firefox, Opera, Safari 10.1+ */
+                        color: white;
+                        opacity: 1;
+                        /* Firefox */
+                    }
+                    :-ms-input-placeholder {
+                        /* Internet Explorer 10-11 */
+                        color: white;
+                    }
+                    ::-ms-input-placeholder {
+                        /* Microsoft Edge */
+                        color: white;
+                    }
+                    &:focus {
+                        background-color: white;
+                        color: #222;
+                        ::placeholder {
+                            /* Chrome, Firefox, Opera, Safari 10.1+ */
+                            color: #222;
+                            opacity: 1;
+                            /* Firefox */
+                        }
+                        :-ms-input-placeholder {
+                            /* Internet Explorer 10-11 */
+                            color: #222;
+                        }
+                        ::-ms-input-placeholder {
+                            /* Microsoft Edge */
+                            color: #222;
+                        }
+                    }
+                }
+                .send-button {
+                    position : relative;
+                    border-radius: 2px;
+                    height: 50px;
+                    width: 50px;
+                    padding: 10px;
+                    background-color: red;
+                    z-index: 1;
+                    transition: all .1s linear;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: #D6000F;
+                    }
+                    svg {
+                        position : absolute;
+                        // height : 100%;
+                        // width : 100%;
+                        fill: white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes appearing {
+    0% {
+        opacity : 0;
+    }
+    100% {
+        opacity : 1;
+    }
+}
+
+@keyframes wiggle-animation {
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+        border-color: transparent transparent $arrowHoverClr transparent;
+    }
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}

@@ -2,6 +2,7 @@ import car from './car'
 import filtered from './filter'
 import message from './message'
 import app from './app'
+import chat from './chat'
 import { reducer as formReducer } from 'redux-form'
 import { combineReducers } from 'redux'
 
@@ -10,6 +11,7 @@ import { combineReducers } from 'redux'
     filtered,
     car,
     message,
+    chat,
     form: formReducer
   })
 

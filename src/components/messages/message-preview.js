@@ -10,7 +10,10 @@ class MessagePreview extends Component {
     constructor(props) {
         super(props)
 
+        console.log(props)
+
         this._onMessagePreview = this._onMessagePreview.bind(this)
+        this._onReply = this._onReply.bind(this)
     }
 
     _onMessagePreview() {
@@ -19,12 +22,16 @@ class MessagePreview extends Component {
         this.props.onPreview(_id, type)
     }
 
+    _onReply(msg) {
+        return this.props.onReply(msg)
+    }
+
     componentDidUpdate() {
-        this._onMessagePreview()
+        return this._onMessagePreview()
     }
 
     componentDidMount() {
-        this._onMessagePreview()
+        return this._onMessagePreview()
     }
 
     shouldComponentUpdate(nextProps) {
@@ -42,12 +49,13 @@ class MessagePreview extends Component {
             phoneNumber,
             message,
             firstname,
-            lastname
+            lastname,
+            reply
         } = msg
 
         return (
             <div className="preview-message card border-primary mb-3">
-                <div className="preview-message_window">
+                <div className="preview-message__window">
                     <div className="card-header text-white bg-primary">
                         <span className="preview-message__close" onClick={ onClosePreview }>X</span>
                         <span className="preview-message__date">{ new Date(createdBy).toDateString() }</span>
@@ -67,6 +75,23 @@ class MessagePreview extends Component {
                                 ? message.split('\n').map((c, i) => <p key={i} className="text-content">{ c }</p>)
                                 : JSON.stringify(msg, null, 3)
                             }
+                        </div>
+                        {
+                            reply.length > 0 &&
+                            <div className="preview-message__replies">
+                            {
+                                // TODO: Add nested blockquotes for X amount of replies
+                                reply.map((r, i) => <blockquote key={ i }> <p>{ `${ new Date(r.createdBy).toLocaleDateString() } ${ new Date(r.createdBy).toLocaleTimeString() }:` }<br />{ r.text }</p> </blockquote>)
+                            }
+                            </div>
+                        }
+                        <div className="preview-message__controls">
+                            <div className="button delete" onClick={ () => {} }>
+                                Delete
+                            </div>
+                            <div className="button" onClick={ () => this._onReply(msg) }>
+                                Reply
+                            </div>
                         </div>
                     </div>
                 </div>

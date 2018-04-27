@@ -29,7 +29,7 @@ class Login extends Component {
     _onSubmit(e) {
         e.preventDefault()
         const { user, pass } = this.state
-        const tmp = this.tmpState
+        // const tmp = this.tmpState
 
         // if(user !== tmp.user || pass !== tmp.pass ) return this.setState({ invalid : true }, () => setTimeout(() => this.setState({ invalid : false }), 4000))
 
@@ -37,7 +37,7 @@ class Login extends Component {
     }
 
     render() {
-        const { user, pass, invalid } = this.state
+        const { user, pass/*, invalid*/ } = this.state
 
         return (
             <Container className="container-login">
