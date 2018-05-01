@@ -6,10 +6,13 @@ import { Form, Card, CardBody, CardTitle, CardHeader, Container, Input } from 'r
 
 import './styles.css'
 
+const test = false
 class Login extends Component {
     state = {
-        user : 'jydauto',
-        pass : 'jydautoleasing123',
+        // user : 'jydauto',
+        // pass : 'jydautoleasing123',
+        user : test ? 'jydauto' : '',
+        pass : test ? 'jydautoleasing123' : '',
         invalid : false,
     }
 

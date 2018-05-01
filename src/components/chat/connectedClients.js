@@ -21,9 +21,13 @@ class ConnectedClients extends Component {
     }
 
     _getNewMessagesCount() {
+        const { onNewMessages } = this.props
         const { clients } = this.state
 
-        return Object.entries(clients).reduce((p, [ id, { newMessages } ]) => p + +(newMessages > 0), 0)
+        const msgsCount = Object.entries(clients).reduce((p, [ id, { newMessages } ]) => p + +(newMessages > 0), 0)
+
+        console.log('Msgs Count => ' + msgsCount)
+        onNewMessages(msgsCount)
     }
 
     _onSelect(id) {
@@ -60,7 +64,7 @@ class ConnectedClients extends Component {
         return (
             <React.Fragment>
                 {
-                    items.map(([ id, { email, name, newMessages, isFocus } ]) => {
+                    items.map(([ id, { email, name, newMessages, isFocus, isTyping } ]) => {
                         const isSelected = id === selected ? 'selected' : ''
                         const onChat = isFocus ? 'on-chat' : ''
                         const hasNewMessages = newMessages ? 'new-message' : ''
@@ -77,6 +81,18 @@ class ConnectedClients extends Component {
                                     newMessages > 0 &&
                                     <div className="messages-badge">{ newMessages }</div>
                                 }
+                                <div className="message-typing">
+                                    {
+                                        isTyping
+                                        ?
+                                            <React.Fragment>
+                                                <span />
+                                                <span />
+                                                <span />
+                                            </React.Fragment>
+                                        : null
+                                    }
+                                </div>
                             </div>
                         )
                     })
@@ -93,7 +109,7 @@ class ConnectedClients extends Component {
         socket.on('server:list connected clients', clnts => {
             // const { clients : oldClients } = this.state
             const newObj = {
-                typing : false,
+                // typing : false,
                 messages : [],
                 isFocus : false,
                 newMessages : 0
@@ -124,8 +140,6 @@ class ConnectedClients extends Component {
         socket.on('server:new connection', ({ id, email, name, isFocus }) => {
             const { clients } = this.state
 
-            console.log(isFocus)
-
             const newClientsList = { ...clients, [ id ] : { name, email, typing : false, messages : [], isFocus }}
 
             return this.setState({ clients : { ...newClientsList }})
@@ -133,7 +147,7 @@ class ConnectedClients extends Component {
 
         socket.on('server:client disconnect', id => {
             const { clients } = this.state
-            const { onSelect, selected } = this.props
+            const { onSelect, selected, onNewMessages } = this.props
 
             delete clients[ id ]
 
@@ -142,6 +156,7 @@ class ConnectedClients extends Component {
                     // If I don't want to remove the messages when people disconnects
                     onSelect('', {})
 
+                    this._getNewMessagesCount()
                     this.setState({ selected : '' })
                 }
             })
@@ -157,43 +172,44 @@ class ConnectedClients extends Component {
             const messages = [ ...msgs, message ]
             const newMessages = selected === id ? 0 : newMsgs + 1
 
-            const newState = { clients : { ...clients, [ id ] : { ...client, messages, newMessages }}}
+            const newState = { clients : { ...clients, [ id ] : { ...client, messages, newMessages, isTyping : false }}}
 
             this.setState(newState, () => {
                 const { clients } = this.state
-                const { onNewMessages } = this.props
+                // const { onNewMessages } = this.props
 
-                if(selected === '') {
-                    const msgsCount = this._getNewMessagesCount()
+                // if(selected === '') {
+                this._getNewMessagesCount()
 
-                    onNewMessages(msgsCount)
-                }
+                // }
 
                 if(selected === id) return onSelect(id, clients[ id ])
             })
         })
 
-        socket.on('server:chat stat', ({ id = '', ...stats }) => {
+        socket.on('server:chat stats', ({ id = '', ...stats }) => {
             const { clients } = this.state
+
+            // console.log(this.state.clients)
 
             const client = clients[ id ]
 
-            const newState = { clients : { ...clients, [ id ] : { ...client, ...stats }}}
+            // if(client) {
+                const newState = { clients : { ...clients, [ id ] : { messages : [], ...client, ...stats }}}
 
-            this.setState(newState)
+                return this.setState({ ...newState })
+            // }
         })
 
-        socket.on('connect', () => {
-            socket.emit('admin:get list connected')
-        })
+        // socket.on('connect', () => {
+        //     socket.emit('admin:get list connected')
+        // })
     }
 
     componentDidMount() {
         const { socket } = this.props
 
-        // setInterval(() => {
-        socket.emit('admin:get list connected')
-        // }, 1000)
+        // socket.emit('admin:get list connected')
 
         return this._socketFunctions(socket)
     }

@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import { sell, credit, contact } from '../../templates'
+
 const formatPhone = s => {
     const s2 = ('' + s).replace(/\D/g, '');
     const m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
@@ -9,8 +11,6 @@ const formatPhone = s => {
 class MessagePreview extends Component {
     constructor(props) {
         super(props)
-
-        console.log(props)
 
         this._onMessagePreview = this._onMessagePreview.bind(this)
         this._onReply = this._onReply.bind(this)
@@ -50,8 +50,11 @@ class MessagePreview extends Component {
             message,
             firstname,
             lastname,
-            reply
+            reply,
+            type
         } = msg
+
+        // TODO: use email templates for messages received
 
         return (
             <div className="preview-message card border-primary mb-3">
@@ -74,6 +77,7 @@ class MessagePreview extends Component {
                                 message
                                 ? message.split('\n').map((c, i) => <p key={i} className="text-content">{ c }</p>)
                                 : JSON.stringify(msg, null, 3)
+                                // : template
                             }
                         </div>
                         {

@@ -21,14 +21,14 @@ class Inventory extends Component {
         {
           this.props.cars.map((car, i) => (
             <tr key={ car.id }>
-              <th scope="row">{car.id}</th>
+              {/* <th scope="row">{car.id}</th> */}
               <td>{car.year}</td>
               <td>{car.make}</td>
               <td>{car.model}</td>
               <td>{car.bodyType}</td>
-              <td>{car.outColor}</td>
+              {/* <td>{car.outColor}</td> */}
               <td>{car.price}</td>
-              <td>{car.status}</td>
+              {/* <td>{car.status}</td> */}
               <td>
                 <Link to={`/admin/car-add-edit/${ car.id }`}>
                   <Icon icon={pencil}/>
@@ -116,14 +116,14 @@ class Cars extends Component {
             <Table hover>
               <thead className="text-success t-head">
                 <tr>
-                  <th>ID</th>
+                  {/* <th>ID</th> */}
                   <th>YEAR</th>
                   <th>MAKE</th>
                   <th>MODEL</th>
                   <th>BODY</th>
-                  <th>COLOR</th>
+                  {/* <th>COLOR</th> */}
                   <th>PRICE</th>
-                  <th>STATUS</th>
+                  {/* <th>STATUS</th> */}
                   <th>EDIT</th>
                   <th>DELETE</th>
                 </tr>

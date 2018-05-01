@@ -12,7 +12,7 @@ import { ChatBubble, ChatSend, Close }from './svg-icons'
 import './style.scss'
 
 class Chat extends Component {
-    state = { open : true, messagesToPreview : [], selected : '', text : '', newMessages : 0 }
+    state = { open : false, messagesToPreview : [], selected : '', text : '', newMessages : 0 }
 
     constructor(props) {
         super(props)
@@ -36,14 +36,16 @@ class Chat extends Component {
     }
 
     _onToggleChat() {
-        const { open, selected, messagesToPreview, newMessages } = this.state
+        const { open : opn, selected, messagesToPreview } = this.state
+
+        const open = !opn
 
         const chatState = {
             messagesToPreview : open ? [].concat(messagesToPreview) : [],
             selected : open ? selected : ''
         }
 
-        return this.setState({ open : !open, ...chatState  }, () => console.log(this.state))
+        return this.setState({ open, ...chatState  }, () => console.log(this.state))
     }
 
     _onSendMessage() {
@@ -107,7 +109,7 @@ class Chat extends Component {
                             {
                                 messagesToPreview.map(({ type, timestamp, text }) => (
                                     <div key={ timestamp } className={ `message ${ type }` }>
-                                        <p className="timestamp">{ timestamp }</p>
+                                        <p className="timestamp">{ new Date(timestamp).toLocaleDateString() + ' ' + new Date(timestamp).toLocaleTimeString() }</p>
                                         <p className="text">{ text }</p>
                                     </div>
                                 ))

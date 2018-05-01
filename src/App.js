@@ -15,7 +15,7 @@ import { getCars } from './actions/car'
 import { getMessages } from './actions/message'
 import { checkAuth, connectSocket } from './actions/app'
 
-const test = true
+const test = false
 
 const AdminRoutes = () => (
     <React.Fragment>

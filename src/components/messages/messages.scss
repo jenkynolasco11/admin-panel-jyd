@@ -34,6 +34,7 @@
 
 .message-list {
     tr {
+        height : 40px;
         color : #222;
         border-bottom : 1px solid #eee;
 
@@ -70,13 +71,17 @@
         }
 
         &.replied {
-            background-color : rgb(0, 192, 0);
-            color : white;
+            background-color : rgb(104, 214, 104);
+            color : rgb(255, 255, 255);
 
             &:hover {
                 background-color : rgb(0, 160, 0);
                 color : rgb(225, 225, 225);
             }
+        }
+
+        td {
+            vertical-align : middle;
         }
     }
 }
