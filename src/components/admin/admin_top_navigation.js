@@ -38,7 +38,7 @@ class AdminNavigatioBar extends React.Component {
                 <Navbar color="primary" dark expand="md">
                     <div className="container">
                         <NavbarBrand href="/admin/">
-                            <img className="logo-banner" src={ logo } alt="company logo"/>
+                            <img className="logo-banner" src='/assets/images/dealer-logo.png' alt="company logo"/>
                         </NavbarBrand>
                         <NavbarToggler onClick={ this.toggle }/>
                             <Collapse isOpen={ this.state.isOpen } navbar>

@@ -18,7 +18,7 @@ export const getMessages = () => async dispatch => {
   try {
     const { message } = store.getState()
 
-    const { data } = await axios.get(`http://localhost:8000/message/all?skip=${ message.skip }&limit=${ message.limit }`)
+    const { data } = await axios.get(`/message/all?skip=${ message.skip }&limit=${ message.limit }`)
 
     if(data.ok) {
       dispatch({

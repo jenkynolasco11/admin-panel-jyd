@@ -21,7 +21,7 @@ export const loginUser = ({ user, pass }) => async dispatch => {
     // form.append('pass', pass)
 
     // const axiosConfig = { headers, data }
-    const url = 'http://localhost:8000/auth/login'
+    const url = '/auth/login'
     try {
         const { data } = await axios({
             url,
@@ -40,7 +40,7 @@ export const loginUser = ({ user, pass }) => async dispatch => {
 }
 
 export const logoutUser = () => async dispatch => {
-    const url = 'http://localhost:8000/auth/logout'
+    const url = '/auth/logout'
     try {
         const { data } = await axios.get(url)
 
@@ -54,7 +54,7 @@ export const logoutUser = () => async dispatch => {
 
 export const checkAuth = () => async dispatch => {
     try {
-        const { data } = await axios.get('http://localhost:8000/auth/is-auth')
+        const { data } = await axios.get('/auth/is-auth')
 
         if(data.ok) return dispatch({ type : TRY_LOGIN_SUCCESS, payload : data.user })
         console.log('uh oh... bad login')
@@ -70,7 +70,7 @@ export const checkAuth = () => async dispatch => {
 
 export const getStats = () => async dispatch => {
     try {
-        const { data } = await axios.get('http://localhost:8000/admin/stats')
+        const { data } = await axios.get('/admin/stats')
 
         if(data.ok) return dispatch({ type : GET_STATS_SUCCESS, payload : data.data })
     } catch (e) {

@@ -233,7 +233,7 @@ class CreateEditCar extends Component {
     if(!id) return
 
     try {
-      const { data } = await axios.get(`http://localhost:8000/car/edit/${ id }`)
+      const { data } = await axios.get(`/car/edit/${ id }`)
 
       if(data.ok) {
         const { imgs : ims } = data.car
@@ -251,7 +251,7 @@ class CreateEditCar extends Component {
             main : main
           }
 
-          const imgUrl = 'http://localhost:8000'+src
+          const imgUrl = ''+src
 
           fetch(imgUrl)
           .then(res => res.blob())

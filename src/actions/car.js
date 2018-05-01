@@ -6,7 +6,7 @@ export const EDIT_CAR_SUCCESS = 'EDIT_CAR_SUCCESS'
 export const REMOVE_CAR_SUCCESS = 'REMOVE_CAR_SUCCESS'
 
 export const getCars = () => async dispatch => {
-  const { data } = await axios.get('http://localhost:8000/car/all')
+  const { data } = await axios.get('/car/all')
   const { cars } = data
 
   dispatch({
@@ -16,7 +16,7 @@ export const getCars = () => async dispatch => {
 }
 
 export const createCar = newCar => async dispatch => {
-  const { data } = await axios.post('http://localhost:8000/car/new', newCar)
+  const { data } = await axios.post('/car/new', newCar)
   const { cars } = data
 
   dispatch({
@@ -26,7 +26,7 @@ export const createCar = newCar => async dispatch => {
 }
 
 export const editCar = car => async dispatch => {
-  const { data } = await axios.put(`http://localhost:8000/car/edit/${ car.id }`, car)
+  const { data } = await axios.put(`/car/edit/${ car.id }`, car)
   const { cars } = data
 
   dispatch({
@@ -36,7 +36,7 @@ export const editCar = car => async dispatch => {
 }
 
 export const deleteCar = id => async dispatch => {
-  const { data } = await axios.delete(`http://localhost:8000/car/delete/${ id }`)
+  const { data } = await axios.delete(`/car/delete/${ id }`)
   const { cars } = data
 
   dispatch({
@@ -76,7 +76,7 @@ export const deleteCar = id => async dispatch => {
 //       headlight: editedCar.headlight
 //     }
 //   }
-//   let updatedcar = await axios.patch(`http://localhost:8000/car/${editedCar.id}`, bodyObj)
+//   let updatedcar = await axios.patch(`/car/${editedCar.id}`, bodyObj)
 //   dispatch({
 //     type: EDIT_CAR_SUCCESS,
 //     payload: updatedcar

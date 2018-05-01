@@ -190,14 +190,12 @@ class ConnectedClients extends Component {
         socket.on('server:chat stats', ({ id = '', ...stats }) => {
             const { clients } = this.state
 
-            // console.log(this.state.clients)
-
             const client = clients[ id ]
 
             // if(client) {
                 const newState = { clients : { ...clients, [ id ] : { messages : [], ...client, ...stats }}}
 
-                return this.setState({ ...newState })
+                return this.setState({ ...newState }, () => console.log(this.state.clients))
             // }
         })
 

@@ -47,7 +47,7 @@ class MessagePreview extends Component {
             email,
             subject,
             phoneNumber,
-            message,
+            // message,
             firstname,
             lastname,
             reply,
@@ -55,6 +55,10 @@ class MessagePreview extends Component {
         } = msg
 
         // TODO: use email templates for messages received
+        // const message = type === 'credit'
+        // ? credit()
+        // : type === 'sell'
+        // ? sell(name, email, phoneNumber, msg.vYear, msg.vMake, )
 
         return (
             <div className="preview-message card border-primary mb-3">
