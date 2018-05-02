@@ -47,7 +47,7 @@ class MessagePreview extends Component {
             email,
             subject,
             phoneNumber,
-            // message,
+            message,
             firstname,
             lastname,
             reply,
