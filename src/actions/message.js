@@ -41,6 +41,16 @@ export const setMessageToRead = ({ id, type }) => async dispatch => {
   }
 }
 
+export const setMessageToDeleted = id => async dispatch => {
+  try {
+    const { data } = await axios.put(`/message/delete/`, { id })
+
+    if(data.ok) return dispatch(getMessages())
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 export const replyToMessage = ({ id, type, reply }) => async dispatch => {
   try {
     const { data } = await axios.post(`/message/reply`, { id, type, reply })

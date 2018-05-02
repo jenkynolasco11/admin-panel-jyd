@@ -10,8 +10,9 @@ class MessagePreview extends Component {
     constructor(props) {
         super(props)
 
-        this._onMessagePreview = this._onMessagePreview.bind(this)
         this._onReply = this._onReply.bind(this)
+        this._onDelete = this._onDelete.bind(this)
+        this._onMessagePreview = this._onMessagePreview.bind(this)
     }
 
     _onMessagePreview() {
@@ -22,6 +23,15 @@ class MessagePreview extends Component {
 
     _onReply(msg) {
         return this.props.onReply(msg)
+    }
+
+    _onDelete(id) {
+        // eslint-disable-next-line no-restricted-globals
+        const shouldDelete = confirm('Are you sure you want to delete this message')
+
+        this.props.onClosePreview()
+
+        return this.props.onDelete(id)
     }
 
     componentDidUpdate() {
@@ -68,7 +78,8 @@ class MessagePreview extends Component {
             condition,
             mileage,
             type,
-            reply
+            reply,
+            _id
         } = msg
 
 
@@ -162,6 +173,7 @@ class MessagePreview extends Component {
                 </div>
             )
         }
+
         return (
             <div className="preview-message card border-primary mb-3">
                 <div className="preview-message__window">
@@ -191,7 +203,7 @@ class MessagePreview extends Component {
                             </div>
                         }
                         <div className="preview-message__controls">
-                            <div className="button delete" onClick={ () => {} }>
+                            <div className="button delete" onClick={ () => this._onDelete(_id) }>
                                 Delete
                             </div>
                             <div className="button" onClick={ () => this._onReply(msg) }>

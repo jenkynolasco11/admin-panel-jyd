@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux'
 
 import MessagesTable from './table'
 import MessagePreview from './message-preview'
-import Editor from './message-reply'
+import MessageReplyEditor from './message-reply'
 
-import { getMessages, setMessageToRead, setSkipValue, replyToMessage } from '../../actions/message'
+import { getMessages, setMessageToRead, setSkipValue, replyToMessage, setMessageToDeleted } from '../../actions/message'
 
 import './messages.scss'
 
@@ -76,13 +76,14 @@ class Messages extends Component {
                             msg={ this.state.selected }
                             onClosePreview={ this._onClosePreview }
                             onPreview={ this.props.setToRead }
+                            onDelete={ this.props.setToDeleted }
                             onReply={ this._onReplyFromPreview }
                         />
                     : null
                 }
                 {
                     this.state.selected !== null && this.state.reply
-                    ?   <Editor
+                    ?   <MessageReplyEditor
                             onSubmitMessage={ this._onReplyMessage }
                             onClose={ this._onClosePreview }
                             msg={ this.state.selected }
@@ -104,6 +105,7 @@ const mapStateToProps = ({ message, app }) => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
     getMessages,
     setToRead : (id, type) => setMessageToRead({ id, type }),
+    setToDeleted : id => setMessageToDeleted(id),
     onReply : (id, type, reply) => replyToMessage({ id, type, reply }),
     onPageChange : skip => setSkipValue(skip)
 }, dispatch)
