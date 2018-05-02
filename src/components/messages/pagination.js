@@ -17,7 +17,6 @@ class TablePagination extends Component {
 
     _createPages() {
         const { skip = 0, limit = 10, count = 0, onPageChange } = this.props
-        const { toShow } = this.state
 
         const pages = Math.ceil(count / limit)
 
