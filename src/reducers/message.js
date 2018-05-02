@@ -8,6 +8,7 @@ import {
   SET_LIMIT_VALUE,
   SET_SKIP_VALUE,
 } from '../actions/message'
+import { debug } from 'util';
 
 const defaultState = {
   messages : [],
