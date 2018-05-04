@@ -9,6 +9,7 @@ import Cars from './components/admin/admin_cars'
 import NewCar from './components/admin/newcar'
 import Login from './components/login'
 import Messages from './components/messages/messages'
+import Builds from './components/builds/builds'
 import Chat from './components/chat'
 
 import { getCars } from './actions/car'
@@ -23,6 +24,7 @@ const AdminRoutes = () => (
       <Route exact path="/admin" component={ Cars } />
       <Route exact path="/admin/car-add-edit/:id?" component={ NewCar } />
       <Route exact path="/admin/messages" component={ Messages } />
+      <Route exact path="/admin/builds" component={ Builds } />
       {/* <Route exact path="/admin/editcar/:id" component={ EditCar } /> */}
       {/* <Route exact path="/admin/messages" component={ Messages } /> */}
     </React.Fragment>

@@ -86,7 +86,7 @@ class Cars extends Component {
                 </Link>
               </Col> */}
               <Col md="4" className="text-center" >
-                <Link to={'#'}>
+                <Link to={'/admin/builds'}>
                   <Icon icon={androidCar} className="text-danger" /> { `BUILDS ${ builds ? `(${builds})` : ''}` }
                 </Link>
               </Col>
