@@ -1,48 +1,26 @@
 import React, { Component } from 'react'
+import classNames from 'classnames'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import { getBuilds } from '../../actions/builds'
 
-import './builds.scss'
-
-const buildData = [{
-	"options" : {
-		"selectedOptions" : [
-			"{Wheels}WHEELS: 19\" CLASSIC PAINTED ALLOY",
-			"{Wheels}WHEELS: 20\" 6 TRI-SPOKE PAINTED ALLOY",
-			"{Wheels}WHEELS: 21\" 6 TWIN SPOKE PAINTED ALLOY",
-			"{Additional_equipment}REAR PASSENGER SPECIFICATION Veneered Picnic Tables w/Vanity Mirrors, Full Length Center Console (4 Seat Configuration), electrically adjustable rear seats, 4 power adjustments, power recline, power fore/aft, power lumbar adjust and 2 12V power outlets, Refrigerated Bottle Cooler",
-			"{Additional_equipment}INTERIOR STYLE SPECIFICATION W/CONTRAST STITCHING Carpet Overmats Contrast Binding, Contrast Stitching, Boot Carpet Contrast Binding, Front &amp; Rear Deep Pile Carpet Overmats, Steering Wheel in Contrasting Color w/Hand Stitching",
-			"{Paint_scheme}MONOTONE PAINT APPLICATION",
-			"{Paint_scheme}EXTENDED RANGE - SOLID &amp; METALLIC",
-			"{Seat_trim}BELUGA, LEATHER SEAT TRIM",
-			"{Seat_trim}LINEN, LEATHER SEAT TRIM",
-			"{Color}red"
-		],
-		"year" : 2018,
-		"make" : "Bentley",
-		"model" : "Flying Spur",
-		"invoice" : "214115",
-		"dest" : "2,725",
-		"msrp" : "189,000",
-		"trim" : "V8 Sedan",
-		"optionsPrice" : "25115"
-	},
-	"firstname" : "Jenky",
-	"lastname" : "Nolasco",
-	"phone" : "3479742990",
-	"email" : "jenky_nolasco@hotmail.com",
-	"hasLease" : "no",
-	"hasTradeIn" : "yes",
-	"isGraduate" : "yes",
-	"isVeteran" : "no",
-	"downPayment" : "12000",
-}];
+import './builds.scss';
 
 const OptionList = (props) => {
+
+    const date = new Date(props.info.createdBy);
+    const createdBy = `${props.info.firstname} ${props.info.lastname} <${props.info.email}>`;
     return (
         <ul className="row w-100 other-details">
+            <li className="col-12 o-detail">
+                <div className="field-name">User</div>
+                <div className="field-text">{createdBy}</div>
+            </li>
+            <li className="col-12 o-detail">
+                <div className="field-name">Date</div>
+                <div className="field-text">{`${date.toLocaleDateString('en-US')} ${date.toLocaleTimeString()}`}</div>
+            </li>
             <li className="col-12 o-detail">
                 <div className="field-name">TRIM</div>
                 <div className="field-text">{props.info.options.trim}</div>
@@ -71,49 +49,74 @@ const TrimOptionsList = (props) => {
                 props.trimOptions.map((trimOption, i) => { 
                     return (
                         <li key={ i } className="option-text">
-                            <div className="field-name">{trimOption.match(/\{.*\}/)[0]}</div>
+                            <div className="field-name">{trimOption.match(/\{.*\}/)[0].replace(/\{|\}/g, '').replace(/_/g, ' ')}</div>
                             <div className="field-text">{trimOption.match(/\}(.*)/)[0].slice(1)}</div>
                         </li>
                     );
-
                 })
             }
         </ul>
     );
 }
 
-class BuildList extends Component {
+class Build extends Component {
+    constructor (props) {
+        super(props);
+        this.build = props.build;
+        this.state = {
+            expanded: false
+        };
+    }
 
-    render() {
-        const getBuildComponent = function (data) {
 
-            return (
-                <li className="build-content col-md-6 col-12">
+    toggleCollapse (event) {
 
+        event.persist();
+        this.setState({ expanded : !this.state.expanded }, () => {
+            event.target.innerHTML = this.state.expanded ? "-" : "+";
+        });
+    }
+
+
+    render () {
+
+        
+        return (
+            <li className="build-content">
+                <div className={classNames('expandable-content', { expanded: this.state.expanded })}>
                     <div className="col-12 image-container">
                         <img alt="vehicle selected" src="/assets/images/car-not-available-placeholder.jpg" />
                     </div>
                     <div className="invoice-container col-12">
-                        <span className="invoice-text">${data.options.msrp}</span>
+                        <span className="invoice-text">${this.build.options.msrp}</span>
                     </div>
                     <div className="car-detail-container col-12">
-                        <div className="detail">{data.options.make}</div>
-                        <div className="detail">{data.options.model}</div>
-                        <div className="detail">{data.options.year}</div>
+                        <div className="detail">{this.build.options.make}</div>
+                        <div className="detail">{this.build.options.model}</div>
+                        <div className="detail">{this.build.options.year}</div>
                     </div>
                     <div className="car-detail-container col-12">
-                        <OptionList info={data} />
+                        <OptionList info={this.build} />
                     </div>
                     <div className="options-container col-12">
-                        <TrimOptionsList trimOptions={data.options.selectedOptions} />
+                        <TrimOptionsList trimOptions={this.build.options.selectedOptions} />
                     </div>
-                </li>
-            );
-        };
+                </div>
+                <div className="collapse-switcher-container">
+                    <button onClick={this.toggleCollapse.bind(this)}>+</button>
+                </div>
 
+            </li> 
+        );
+    }
+}
+
+class BuildList extends Component {
+
+    render() {
         return (
             <ul className="build-list-container row">
-                {this.props.buildData.map(buildData => getBuildComponent(buildData))}
+                {this.props.buildData.map((buildData, index) => <Build build={buildData} key={index} />)}
             </ul>
         );
     }

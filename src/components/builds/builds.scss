@@ -1,22 +1,61 @@
 .builds-container {
-    padding: 5rem;
-
+    padding: 1rem;
 }
 
+
+.build-list-container {
+    width: 100%;
+    align-items: flex-start;
+}
 
 
 .build-content {
     background: white;
     list-style-type: none;
-    margin: 2.5rem auto;
-    max-width: 45%;
     position: relative;
+    display: inline-block;
+    max-width: 30%;
+    margin: 2.5rem auto;
+
+    .expandable-content {
+        max-height: 660px;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+
+        &.expanded {
+            max-height: 2000px;
+        }
+    }
+
+    &.expanded {
+        max-height: initial;
+    }
+
+    .collapse-switcher-container {
+
+        button {
+            background: #de0000;
+            color: #fff;
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            font-size: 33px;
+            font-weight: bold;
+            border-radius: 25px;
+            border: none;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+
 
     .image-container {
         img {
             width: 100%;
         }
     }
+
 
     .invoice-container {
         position: absolute;
@@ -44,6 +83,7 @@
             font-size: 1.5rem;
             font-weight: bold;
         }
+
     }
 
 
@@ -56,7 +96,7 @@
 
         .detail {
             color: white;
-            padding: 1rem 2.5rem;
+            padding: 1rem 1.5rem;
             background: red;
             font-weight: bold;
             font-size: 1rem;
