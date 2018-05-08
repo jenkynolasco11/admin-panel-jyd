@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
+import { getBuilds } from '../../actions/builds'
 
 import './builds.scss'
 
@@ -60,15 +63,14 @@ const OptionList = (props) => {
     );
 }
 
-
 const TrimOptionsList = (props) => {
 
     return (
         <ul className="option-list">
             {
-                props.trimOptions.map(trimOption => { 
+                props.trimOptions.map((trimOption, i) => { 
                     return (
-                        <li className="option-text">
+                        <li key={ i } className="option-text">
                             <div className="field-name">{trimOption.match(/\{.*\}/)[0]}</div>
                             <div className="field-text">{trimOption.match(/\}(.*)/)[0].slice(1)}</div>
                         </li>
@@ -80,7 +82,6 @@ const TrimOptionsList = (props) => {
     );
 }
 
-
 class BuildList extends Component {
 
     render() {
@@ -90,10 +91,10 @@ class BuildList extends Component {
                 <li className="build-content col-md-6 col-12">
 
                     <div className="col-12 image-container">
-                        <img src="https://www.bentleymotors.com/content/dam/bentley/Master/Models/Hero/Flying%20Spur%20V8%20S/621_V8s_MY17_Profile_Rubino%201920%20x%20670.jpg/_jcr_content/renditions/original.image_file.1366.477.file/621_V8s_MY17_Profile_Rubino%201920%20x%20670.jpg" />
+                        <img alt="vehicle selected" src="/assets/images/car-not-available-placeholder.jpg" />
                     </div>
                     <div className="invoice-container col-12">
-                        <span class="invoice-text">${data.options.msrp}</span>
+                        <span className="invoice-text">${data.options.msrp}</span>
                     </div>
                     <div className="car-detail-container col-12">
                         <div className="detail">{data.options.make}</div>
@@ -109,6 +110,7 @@ class BuildList extends Component {
                 </li>
             );
         };
+
         return (
             <ul className="build-list-container row">
                 {this.props.buildData.map(buildData => getBuildComponent(buildData))}
@@ -118,14 +120,26 @@ class BuildList extends Component {
 }
 
 class Builds extends Component {
+    componentDidMount() {
+        this.props.getBuilds()
+    }
+
     render() {
         return (
             <div className="builds-container">
-                <BuildList buildData={buildData} />
+                <BuildList buildData={this.props.builds} />
             </div>
         );
     }
 }
 
+const mapStateToProps = state => ({
+    builds : state.builds.builds
+})
 
-export default Builds;
+const mapDispatchToProps = dispatch => bindActionCreators({
+    getBuilds
+}, dispatch)
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Builds);

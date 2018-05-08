@@ -10,7 +10,7 @@ import {
 } from '../actions/builds'
   
 const defaultState = {
-    messages : [],
+    builds : [],
     count : 0,
     limit : 4,
     skip : 0,

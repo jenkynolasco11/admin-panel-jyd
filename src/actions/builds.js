@@ -16,7 +16,7 @@ export const setLimitValue = payload => ({ type : SET_LIMIT_VALUE, payload })
 export const getBuilds = () => async dispatch => {
     try {
         const { message } = store.getState()
-        const { data } = await axios.get(`/builds/all?skip=${ message.skip }&limit=${ message.limit }`)
+        const { data } = await axios.get(`/car/build/all?skip=${ message.skip }&limit=${ message.limit }`)
         if (data.ok) {
             dispatch({
                 type : GET_BUILDS_SUCCESS,
@@ -27,7 +27,7 @@ export const getBuilds = () => async dispatch => {
         console.log(e);
     }
 }
-  
+
 export const setBuildToReviewed = ({ id }) => async dispatch => {
     try {
         const { data } = await axios.put(`/build/read/${ id }`)
@@ -38,7 +38,7 @@ export const setBuildToReviewed = ({ id }) => async dispatch => {
         console.log(e)
     }
 }
-  
+
 export const deleteBuild = id => async dispatch => {
     try {
         const { data } = await axios.put(`/build/delete/{id}` )

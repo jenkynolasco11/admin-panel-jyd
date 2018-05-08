@@ -15,6 +15,12 @@ export const getCars = () => async dispatch => {
   })
 }
 
+// export const getBuilds = () => async dispatch => {
+//   const { data } = await axios.get(`/car/build/all`)
+
+//   console.log(data.builds)
+// }
+
 export const createCar = newCar => async dispatch => {
   const { data } = await axios.post('/car/new', newCar)
   const { cars } = data
