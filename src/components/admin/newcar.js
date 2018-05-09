@@ -6,6 +6,7 @@ import { createCar, editCar } from '../../actions/car'
 import { Link, withRouter } from 'react-router-dom'
 import axios from 'axios'
 
+import { autofiller, autofillerAfterTrim } from './form-helpers'
 import './newcar.scss'
 
 const IMG_TYPES = ['image/gif', 'image/jpeg', 'image/png']
@@ -78,6 +79,9 @@ class ImageUploader extends Component {
 
     this.props.onChange({ ...imgs })
   }
+
+
+
 
   render() {
     // console.log(this.props.imgs)
@@ -155,6 +159,7 @@ class CreateEditCar extends Component {
     make: '',
     model: '',
     configuration : '',
+    bodyTypes: [],
     mileage: '',
     engine: '',
     transmission: '',
@@ -163,6 +168,7 @@ class CreateEditCar extends Component {
     outColor: '',
     fuel: '',
     drivetrain : '',
+    trimSet : [],
     price: 0,
     msrp: 0,
     status: '',
@@ -172,7 +178,7 @@ class CreateEditCar extends Component {
     overview : '',
     extraFeatures : '',
     isFeatured : true,
-
+    carSet: [],
     imgs : {},
     alertMsg: false
   }
@@ -182,11 +188,37 @@ class CreateEditCar extends Component {
 
     this.state = {
       ...this.state,
-      // ...defaultState
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.alertMsgClose = this.alertMsgClose.bind(this)
+  }
+
+
+  async autoPopulate (e) {
+    try {
+      if (this.state.year !== '' && this.state.make !== '' && this.state.model !== '') {
+        
+        const fetchedCarData = await axios.post('/car/autofill', {
+          year: this.state.year,
+          make: this.state.make,
+          model: this.state.model
+        });
+
+        this.setState({ carSet: fetchedCarData.data });
+
+        autofiller(this);
+      }      
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+
+  trimSelectedEvent(e) {
+
+    this.setState({configuration: e.target.value}, () => autofillerAfterTrim(this))
+    
   }
 
   handleSubmit(e) {
@@ -197,9 +229,10 @@ class CreateEditCar extends Component {
     this.setState({
       alertMsg: true,
       year: '',
+      bodyTypes: [],
       make: '',
       model: '',
-      configuration : '',
+      trimSet: [],
       mileage: '',
       engine: '',
       transmission: '',
@@ -302,12 +335,14 @@ class CreateEditCar extends Component {
                   <FormGroup>
                     <Label for="year">Year</Label>
                     <Input
+                      ref="year"
                       required
                       type="number"
                       name="year"
                       id="year"
                       value={ this.state.year }
                       onChange={(e) => this.setState({year: e.target.value})}
+                      onBlur={this.autoPopulate.bind(this)}
                     />
                   </FormGroup>
                 </Col>
@@ -318,9 +353,11 @@ class CreateEditCar extends Component {
                       required
                       type="text"
                       name="make"
+                      ref="make"
                       id="make"
                       value={ this.state.make }
                       onChange={(e) => this.setState({make: e.target.value})}
+                      onBlur={this.autoPopulate.bind(this)}
                     />
                   </FormGroup>
                 </Col>
@@ -330,9 +367,11 @@ class CreateEditCar extends Component {
                     <Input
                       type="text"
                       name="model"
+                      ref="model"
                       id="model"
                       value={this.state.model}
                       onChange={(e) => this.setState({model: e.target.value})}
+                      onBlur={this.autoPopulate.bind(this)}
                     />
                   </FormGroup>
                 </Col>
@@ -340,12 +379,22 @@ class CreateEditCar extends Component {
                   <FormGroup>
                     <Label for="configuration">Configuration</Label>
                     <Input
-                      type="text"
+                      type="select"
                       name="configuration"
                       id="configuration"
                       value={this.state.configuration}
-                      onChange={(e) => this.setState({configuration: e.target.value})}
-                    />
+                      onChange={this.trimSelectedEvent.bind(this)}
+                      onSelect={this.trimSelectedEvent.bind(this)}
+                    >
+                      <option value="" disabled selected >Select Trim</option>
+                      {
+                        this.state.trimSet.length > 0 && this.state.trimSet.map((trim, index) => {
+                          return (
+                            <option key={index} value={trim}>{trim.toUpperCase()}</option>
+                          )
+                        })
+                      }
+                    </Input>
                   </FormGroup>
                 </Col>
               </Row>
@@ -354,28 +403,11 @@ class CreateEditCar extends Component {
                   <FormGroup>
                     <Label for="body">Body</Label>
                     <Input
-                      type="select"
+                      type="text"
                       name="select"
                       id="body"
                       value={this.state.bodyType}
-                      onChange={(e) => this.setState({bodyType: e.target.value})}
-                    >
-                      <option value="" disabled selected >Select Body</option>
-                      <option value="suv">SUV</option>
-                      <option value="truck">Truck</option>
-                      <option value="sedan">Sedan</option>
-                      <option value="van">Van</option>
-                      <option value="coupe">Coupe</option>
-                      <option value="wagon">Wagon</option>
-                      <option value="convertible">Convertible</option>
-                      <option value="sport">Sports Car</option>
-                      <option value="diesel">Diesel</option>
-                      <option value="crossover">Crossover</option>
-                      <option value="luxury">Luxury Car</option>
-                      <option value="hybrid">Hybrid/Electric</option>
-                      <option value="hatchback">Hatchback</option>
-                      <option value="certified">Certified Pre-Owned</option>
-                    </Input>
+                    />
                   </FormGroup>
                 </Col>
                 <Col md="3" sm="6" xs="12">
@@ -428,63 +460,31 @@ class CreateEditCar extends Component {
                   <FormGroup>
                     <Label for="transmission">Transmission Type</Label>
                     <Input
-                      type="select"
+                      type="text"
                       name="transmission"
                       id="transmission"
                       value={this.state.transmission}
-                      onChange={(e) => this.setState({transmission: e.target.value})}
-                    >
-                      <option value="" disabled selected >Select Transmission</option>
-                      <option value="manual 4-speed">Manual 4-Speed</option>
-                      <option value="manual 5-speed">Manual 5-Speed</option>
-                      <option value="manual 6-speed">Manual 6-Speed</option>
-                      <option value="manual 7-speed">Manual 7-Speed</option>
-                      <option value="auto 3-speed">Auto 3-Speed</option>
-                      <option value="auto 4-speed">Auto 4-Speed</option>
-                      <option value="auto 5-speed">Auto 5-speed</option>
-                      <option value="auto 6-speed">Auto 6-Speed</option>
-                      <option value="auto 7-speed dual clutch">Auto 7-Speed Dual Clutch</option>
-                      <option value="auto 8-speed dual clutch">Auto 8-Speed Dual Clutch</option>
-                      <option value="auto 8-speed">Auto 8-Speed</option>
-                      <option value="auto 9-speed">Auto 9-Speed</option>
-                    </Input>
+                    />
                   </FormGroup>
                 </Col>
                 <Col md="3" sm="6" xs="12">
                   <FormGroup>
                     <Label for="fuel">Fuel Type</Label>
                     <Input
-                      type="select"
+                      type="text"
                       id="fuel"
                       value={this.state.fuel}
-                      onChange={(e) => this.setState({fuel: e.target.value})}
-                    >
-                      <option value="" disabled selected >Select Fuel</option>
-                      <option value="gasoline">Gasoline</option>
-                      <option value="diesel">Diesel</option>
-                      <option value="natural gas">Natural Gas</option>
-                      <option value="ethanol">Ethanol</option>
-                      <option value="bio diesel">Bio Diesel</option>
-                      <option value="electricity">Electricity</option>
-                      <option value="hybrid">Fuel/Electricity</option>
-                    </Input>
+                    />
                   </FormGroup>
                 </Col>
                 <Col md="3" sm="6" xs="12">
                   <FormGroup>
                     <Label for="drivetrain">Drivetrain</Label>
                     <Input
-                      type="select"
+                      type="text"
                       id="drivetrain"
                       value={this.state.drivetrain}
-                      onChange={(e) => this.setState({drivetrain: e.target.value})}
-                    >
-                      <option value="" disabled selected >Select Drivetrain</option>
-                      <option value="awd">AWD</option>
-                      <option value="rwd">RWD</option>
-                      <option value="fwd">FWD</option>
-                      <option value="4wd">4WD</option>
-                    </Input>
+                    />
                   </FormGroup>
                 </Col>
                 <Col md="3" sm="6" xs="12">
